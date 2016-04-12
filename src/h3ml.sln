@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Oculus", "Oculus\Oculus.vcxproj", "{0BA8A21A-33EF-4D47-BB92-C57F1A30D42B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LiteHtml", "LiteHtml\LiteHtml.vcxproj", "{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0BA8A21A-33EF-4D47-BB92-C57F1A30D42B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0BA8A21A-33EF-4D47-BB92-C57F1A30D42B}.Debug|Win32.Build.0 = Debug|Win32
+		{0BA8A21A-33EF-4D47-BB92-C57F1A30D42B}.Release|Win32.ActiveCfg = Release|Win32
+		{0BA8A21A-33EF-4D47-BB92-C57F1A30D42B}.Release|Win32.Build.0 = Release|Win32
+		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Debug|Win32.Build.0 = Debug|Win32
+		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Release|Win32.ActiveCfg = Release|Win32
+		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
