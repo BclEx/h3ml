@@ -21,8 +21,9 @@
 #define GUMBO_UTIL_H_
 #ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
-#endif
+#else
 #include <stdbool.h>
+#endif
 #include <stddef.h>
 
 #ifdef __cplusplus

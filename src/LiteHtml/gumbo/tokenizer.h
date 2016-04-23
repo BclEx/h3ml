@@ -20,7 +20,9 @@
 #ifndef GUMBO_TOKENIZER_H_
 #define GUMBO_TOKENIZER_H_
 
+#ifndef _MSC_VER
 #include <stdbool.h>
+#endif
 #include <stddef.h>
 
 #include "gumbo.h"

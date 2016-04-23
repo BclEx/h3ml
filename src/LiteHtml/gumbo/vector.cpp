@@ -19,7 +19,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strings.h>
+#include "strings.h"
 
 #include "util.h"
 
@@ -33,7 +33,7 @@ void gumbo_vector_init(struct GumboInternalParser* parser,
   vector->capacity = initial_capacity;
   if (initial_capacity > 0) {
     vector->data =
-        gumbo_parser_allocate(parser, sizeof(void*) * initial_capacity);
+        (void **)gumbo_parser_allocate(parser, sizeof(void*) * initial_capacity);
   } else {
     vector->data = NULL;
   }
@@ -53,7 +53,7 @@ static void enlarge_vector_if_full(
       size_t old_num_bytes = sizeof(void*) * vector->capacity;
       vector->capacity *= 2;
       size_t num_bytes = sizeof(void*) * vector->capacity;
-      void** temp = gumbo_parser_allocate(parser, num_bytes);
+      void** temp = (void **)gumbo_parser_allocate(parser, num_bytes);
       memcpy(temp, vector->data, old_num_bytes);
       gumbo_parser_deallocate(parser, vector->data);
       vector->data = temp;
@@ -61,7 +61,7 @@ static void enlarge_vector_if_full(
       // 0-capacity vector; no previous array to deallocate.
       vector->capacity = 2;
       vector->data =
-          gumbo_parser_allocate(parser, sizeof(void*) * vector->capacity);
+          (void **)gumbo_parser_allocate(parser, sizeof(void*) * vector->capacity);
     }
   }
 }

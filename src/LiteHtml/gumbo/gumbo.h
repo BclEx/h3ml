@@ -416,6 +416,8 @@ typedef enum {
    */
   GUMBO_INSERTION_FOSTER_PARENTED = 1 << 10,
 } GumboParseFlags;
+__forceinline void operator|=(GumboParseFlags &a, int b) { a = (GumboParseFlags)(a | b); }
+__forceinline void operator&=(GumboParseFlags &a, int b) { a = (GumboParseFlags)(a & b); }
 
 /**
  * Information specific to document nodes.

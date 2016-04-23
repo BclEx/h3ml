@@ -3,7 +3,7 @@
 #include <string.h>
 using namespace litehtml;
 
-def_color g_def_colors[] = {
+def_color litehtml::g_def_colors[] = {
 	{_t("transparent"),_t("rgba(0, 0, 0, 0)")},
 	{_t("AliceBlue"),_t("#F0F8FF")},
 	{_t("AntiqueWhite"),_t("#FAEBD7")},
