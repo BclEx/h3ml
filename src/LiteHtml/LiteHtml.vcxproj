@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Html</RootNamespace>
+    <RootNamespace>LiteHtml</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="BrowserWnd.cpp" />
+    <ClCompile Include="el_omnibox.cpp" />
+    <ClCompile Include="HtmlViewWnd.cpp" />
+    <ClCompile Include="litebrowser.cpp" />
+    <ClCompile Include="sl_edit.cpp" />
+    <ClCompile Include="ToolbarWnd.cpp" />
+    <ClCompile Include="tordexhttp.cpp" />
+    <ClCompile Include="TxThread.cpp" />
+    <ClCompile Include="web_history.cpp" />
+    <ClCompile Include="web_page.cpp" />
+    <ClCompile Include="..\LiteHtml\containers\cairo\cairo_container.cpp">
+      <Filter>LiteHtml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LiteHtml\containers\cairo\cairo_font.cpp">
+      <Filter>LiteHtml</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BrowserWnd.h" />
+    <ClInclude Include="ctrl_container.h" />
+    <ClInclude Include="el_omnibox.h" />
+    <ClInclude Include="globals.h" />
+    <ClInclude Include="HtmlViewWnd.h" />
+    <ClInclude Include="litebrowser.h" />
+    <ClInclude Include="sl_edit.h" />
+    <ClInclude Include="ToolbarWnd.h" />
+    <ClInclude Include="tordexhttp.h" />
+    <ClInclude Include="TxThread.h" />
+    <ClInclude Include="web_history.h" />
+    <ClInclude Include="web_page.h" />
+    <ClInclude Include="..\LiteHtml\containers\cairo\cairo_container.h">
+      <Filter>LiteHtml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LiteHtml\containers\cairo\cairo_font.h">
+      <Filter>LiteHtml</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LiteBrowser.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="litebrowser.ico" />
+    <Image Include="small.ico" />
+    <Image Include="html\addr-center.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\addr-left.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\addr-right.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\back-active.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\back-disabled.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\back-hover.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\back-normal.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\forward-active.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\forward-disabled.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\forward-hover.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\forward-normal.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\home-active.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\home-hover.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\home-normal.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\toolbar-bg.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\settings-active.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\settings-hover.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\settings-normal.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\reload-normal.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\reload-hover.png">
+      <Filter>html</Filter>
+    </Image>
+    <Image Include="html\reload-active.png">
+      <Filter>html</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="html\toolbar.html">
+      <Filter>html</Filter>
+    </None>
+    <None Include="..\LiteHtml\include\master.css">
+      <Filter>LiteHtml</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="html">
+      <UniqueIdentifier>{0e983d80-d762-4ee3-9de5-252e8540d7fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LiteHtml">
+      <UniqueIdentifier>{e9b8f7ca-79f5-4b00-84d0-a807ca5cd1b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

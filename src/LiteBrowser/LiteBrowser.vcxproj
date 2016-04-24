@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A153723A-E3F6-49D7-B44A-FAD2C295F0F0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>LiteBrowser</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NO_TOOLBAR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\LiteHtml\include;..\libs\cairo\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\libs\cairo\32;..\libs\freeimage\32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>LiteBrowser.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NO_TOOLBAR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\LiteHtml\include;..\libs\cairo\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\libs\cairo\32;..\libs\freeimage\32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\LiteHtml\containers\cairo\cairo_container.h" />
+    <ClInclude Include="..\LiteHtml\containers\cairo\cairo_font.h" />
+    <ClInclude Include="BrowserWnd.h" />
+    <ClInclude Include="ctrl_container.h" />
+    <ClInclude Include="el_omnibox.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="HtmlViewWnd.h" />
+    <ClInclude Include="LiteBrowser.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="sl_edit.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="ToolbarWnd.h" />
+    <ClInclude Include="tordexhttp.h" />
+    <ClInclude Include="TxThread.h" />
+    <ClInclude Include="web_history.h" />
+    <ClInclude Include="web_page.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\LiteHtml\containers\cairo\cairo_container.cpp" />
+    <ClCompile Include="..\LiteHtml\containers\cairo\cairo_font.cpp" />
+    <ClCompile Include="BrowserWnd.cpp" />
+    <ClCompile Include="el_omnibox.cpp" />
+    <ClCompile Include="HtmlViewWnd.cpp" />
+    <ClCompile Include="LiteBrowser.cpp" />
+    <ClCompile Include="sl_edit.cpp" />
+    <ClCompile Include="ToolbarWnd.cpp" />
+    <ClCompile Include="tordexhttp.cpp" />
+    <ClCompile Include="TxThread.cpp" />
+    <ClCompile Include="web_history.cpp" />
+    <ClCompile Include="web_page.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="html\addr-center.png" />
+    <Image Include="html\addr-left.png" />
+    <Image Include="html\addr-right.png" />
+    <Image Include="html\back-active.png" />
+    <Image Include="html\back-disabled.png" />
+    <Image Include="html\back-hover.png" />
+    <Image Include="html\back-normal.png" />
+    <Image Include="html\forward-active.png" />
+    <Image Include="html\forward-disabled.png" />
+    <Image Include="html\forward-hover.png" />
+    <Image Include="html\forward-normal.png" />
+    <Image Include="html\home-active.png" />
+    <Image Include="html\home-hover.png" />
+    <Image Include="html\home-normal.png" />
+    <Image Include="html\reload-active.png" />
+    <Image Include="html\reload-hover.png" />
+    <Image Include="html\reload-normal.png" />
+    <Image Include="html\settings-active.png" />
+    <Image Include="html\settings-hover.png" />
+    <Image Include="html\settings-normal.png" />
+    <Image Include="html\toolbar-bg.png" />
+    <Image Include="LiteBrowser.ico" />
+    <Image Include="Small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LiteBrowser.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LiteHtml\include\master.css" />
+    <None Include="html\toolbar.html" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
