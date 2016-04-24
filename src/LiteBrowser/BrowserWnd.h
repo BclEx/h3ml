@@ -6,13 +6,13 @@ class CHTMLViewWnd;
 class CToolbarWnd;
 class CBrowserWnd
 {
-	HWND				_hWnd;
-	HINSTANCE			_hInst;
-	CHTMLViewWnd*		_view;
+	HWND _hWnd;
+	HINSTANCE _hInst;
+	CHTMLViewWnd *_view;
 #ifndef NO_TOOLBAR
-	CToolbarWnd*		_toolbar;
+	CToolbarWnd *_toolbar;
 #endif
-	litehtml::context	_browserContext;
+	litehtml::context _browserContext;
 public:
 	CBrowserWnd(HINSTANCE hInst);
 	virtual ~CBrowserWnd();

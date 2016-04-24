@@ -1,90 +1,87 @@
 #pragma once
-#include "web_page.h"
-#include "web_history.h"
+#include "WebPage.h"
+#include "WebHistory.h"
 
-#define HTMLVIEWWND_CLASS	L"HTMLVIEW_WINDOW"
-
+#define HTMLVIEWWND_CLASS L"HTMLVIEW_WINDOW"
 #define WM_IMAGE_LOADED		(WM_USER + 1000)
 #define WM_PAGE_LOADED		(WM_USER + 1001)
 
 using namespace litehtml;
 class CBrowserWnd;
-
 class CHTMLViewWnd
 {
-	HWND						m_hWnd;
-	HINSTANCE					m_hInst;
-	int							m_top;
-	int							m_left;
-	int							m_max_top;
-	int							m_max_left;
-	litehtml::context*			m_context;
-	web_history					m_history;
-	web_page*					m_page;
-	web_page*					m_page_next;
-	CRITICAL_SECTION			m_sync;
-	simpledib::dib				m_dib;
-	CBrowserWnd*				m_parent;
+	HWND _hWnd;
+	HINSTANCE _hInst;
+	int _top;
+	int _left;
+	int _max_top;
+	int _max_left;
+	context *_context;
+	WebHistory _history;
+	WebPage *_page;
+	WebPage *_page_next;
+	CRITICAL_SECTION _sync;
+	Dib _dib;
+	CBrowserWnd *_parent;
 public:
-	CHTMLViewWnd(HINSTANCE	hInst, litehtml::context* ctx, CBrowserWnd* parent);
-	virtual ~CHTMLViewWnd(void);
+	CHTMLViewWnd(HINSTANCE	hInst, context *ctx, CBrowserWnd *parent);
+	virtual ~CHTMLViewWnd();
 
-	void				create(int x, int y, int width, int height, HWND parent);
-	void				open(LPCWSTR url, bool reload = FALSE);
-	HWND				wnd()	{ return m_hWnd;	}
-	void				refresh();
-	void				back();
-	void				forward();
+	void Create(int x, int y, int width, int height, HWND parent);
+	void Open(LPCWSTR url, bool reload = FALSE);
+	HWND Wnd() { return _hWnd; }
+	void Refresh();
+	void Back();
+	void Forward();
 
-	litehtml::context*	get_html_context();
-	void				set_caption();
-	void				lock();
-	void				unlock();
-	bool				is_valid_page(bool with_lock = true);
-	web_page*			get_page(bool with_lock = true);
+	context *GetHtmlContext();
+	void SetCaption();
+	void Lock();
+	void Unlock();
+	bool IsValidPage(bool withLock = true);
+	WebPage *GetPage(bool withLock = true);
 
-	void				render(BOOL calc_time = FALSE, BOOL do_redraw = TRUE, int calc_repeat = 1);
-	void				get_client_rect(litehtml::position& client) const;
-	void				show_hash(std::wstring& hash);
-	void				update_history();
+	void Render(BOOL calcTime = FALSE, BOOL doRedraw = TRUE, int calcRepeat = 1);
+	void GetClientRect(position &client) const;
+	void ShowHash(std::wstring &hash);
+	void UpdateHistory();
 
 protected:
-	virtual void		OnCreate();
-	virtual void		OnPaint(simpledib::dib* dib, LPRECT rcDraw);
-	virtual void		OnSize(int width, int height);
-	virtual void		OnDestroy();
-	virtual void		OnVScroll(int pos, int flags);
-	virtual void		OnHScroll(int pos, int flags);
-	virtual void		OnMouseWheel(int delta);
-	virtual void		OnKeyDown(UINT vKey);
-	virtual void		OnMouseMove(int x, int y);
-	virtual void		OnLButtonDown(int x, int y);
-	virtual void		OnLButtonUp(int x, int y);
-	virtual void		OnMouseLeave();
-	virtual void		OnPageReady();
+	virtual void OnCreate();
+	virtual void OnPaint(Dib *dib, LPRECT rcDraw);
+	virtual void OnSize(int width, int height);
+	virtual void OnDestroy();
+	virtual void OnVScroll(int pos, int flags);
+	virtual void OnHScroll(int pos, int flags);
+	virtual void OnMouseWheel(int delta);
+	virtual void OnKeyDown(UINT vKey);
+	virtual void OnMouseMove(int x, int y);
+	virtual void OnLButtonDown(int x, int y);
+	virtual void OnLButtonUp(int x, int y);
+	virtual void OnMouseLeave();
+	virtual void OnPageReady();
 	
-	void				redraw(LPRECT rcDraw, BOOL update);
-	void				update_scroll();
-	void				update_cursor();
-	void				create_dib(int width, int height);
-	void				scroll_to(int new_left, int new_top);
-	
+	void Redraw(LPRECT rcDraw, BOOL update);
+	void UpdateScroll();
+	void UpdateCursor();
+	void CreateDib(int width, int height);
+	void ScrollTo(int newLeft, int newTop);
 
 private:
 	static LRESULT	CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 
-inline litehtml::context* CHTMLViewWnd::get_html_context()
+inline context *CHTMLViewWnd::GetHtmlContext()
 {
-	return m_context;
+	return _context;
 }
 
-inline void CHTMLViewWnd::lock()
+inline void CHTMLViewWnd::Lock()
 {
-	EnterCriticalSection(&m_sync);
+	EnterCriticalSection(&_sync);
 }
 
-inline void CHTMLViewWnd::unlock()
+inline void CHTMLViewWnd::Unlock()
 {
-	LeaveCriticalSection(&m_sync);
+	LeaveCriticalSection(&_sync);
 }

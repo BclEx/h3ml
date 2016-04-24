@@ -1,62 +1,53 @@
 #include "globals.h"
 #include "TxThread.h"
 
-CTxThread::CTxThread(void)
+CTxThread::CTxThread()
 {
-	m_hThread	= NULL;
-	m_hStop		= NULL;
-	m_trdID		= NULL;
+	_hThread = NULL;
+	_hStop = NULL;
+	_trdID = NULL;
 }
 
-CTxThread::~CTxThread(void)
+CTxThread::~CTxThread()
 {
 	Stop();
-	if(m_hThread) CloseHandle(m_hThread);
-	if(m_hStop)   CloseHandle(m_hStop);
+	if (_hThread) CloseHandle(_hThread);
+	if (_hStop) CloseHandle(_hStop);
 }
 
 void CTxThread::Run()
 {
 	Stop();
-	m_hStop	  = CreateEvent(NULL, FALSE, FALSE, NULL);
-	m_hThread = CreateThread(NULL, 0, sThreadProc, (LPVOID) this, 0, &m_trdID);
+	_hStop = CreateEvent(NULL, FALSE, FALSE, NULL);
+	_hThread = CreateThread(NULL, 0, sThreadProc, (LPVOID)this, 0, &_trdID);
 }
 
 void CTxThread::Stop()
 {
-	if(m_hThread)
-	{
-		if(m_hStop)
-		{
-			SetEvent(m_hStop);
-		}
-		WaitForSingleObject(m_hThread, INFINITE);
-		CloseHandle(m_hThread);
-		m_hThread = NULL;
+	if (_hThread) {
+		if (_hStop)
+			SetEvent(_hStop);
+		WaitForSingleObject(_hThread, INFINITE);
+		CloseHandle(_hThread);
+		_hThread = NULL;
 	}
-	if(m_hStop)   CloseHandle(m_hStop);
-	m_hStop = NULL;
+	if (_hStop) CloseHandle(_hStop);
+	_hStop = NULL;
 }
 
-DWORD WINAPI CTxThread::sThreadProc( LPVOID lpParameter )
+DWORD WINAPI CTxThread::sThreadProc(LPVOID lpParameter)
 {
-	CTxThread* pThis = (CTxThread*) lpParameter;
-	return pThis->ThreadProc();
+	CTxThread *this_ = (CTxThread *)lpParameter;
+	return this_->ThreadProc();
 }
 
-BOOL CTxThread::WaitForStop( DWORD ms )
+BOOL CTxThread::WaitForStop(DWORD ms)
 {
-	if(WaitForSingleObject(m_hStop, ms) != WAIT_TIMEOUT)
-	{
-		return TRUE;
-	}
-	return FALSE;
+	return (WaitForSingleObject(_hStop, ms) != WAIT_TIMEOUT ? TRUE : FALSE);
 }
 
-void CTxThread::postMessage( UINT Msg, WPARAM wParam, LPARAM lParam )
+void CTxThread::PostMessage(UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-	if(m_hThread)
-	{
-		PostThreadMessage(m_trdID, Msg, wParam, lParam);
-	}
+	if (_hThread)
+		PostThreadMessage(_trdID, Msg, wParam, lParam);
 }

@@ -103,7 +103,7 @@ LRESULT CALLBACK CBrowserWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, L
 			return 0;
 		case WM_ACTIVATE:
 			if (LOWORD(wParam) != WA_INACTIVE)
-				SetFocus(this_->_view->wnd());
+				SetFocus(this_->_view->Wnd());
 			return 0;
 		}
 	}
@@ -115,12 +115,12 @@ void CBrowserWnd::OnCreate()
 	RECT rcClient;
 	GetClientRect(_hWnd, &rcClient);
 #ifndef NO_TOOLBAR
-	_toolbar->create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, m_hWnd);
-	_view->create(rcClient.left, rcClient.top + m_toolbar->height(), rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - _toolbar->height(), _hWnd);
+	_toolbar->Create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, m_hWnd);
+	_view->Create(rcClient.left, rcClient.top + m_toolbar->height(), rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - _toolbar->height(), _hWnd);
 #else
-	_view->create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, _hWnd);
+	_view->Create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, _hWnd);
 #endif
-	SetFocus(_view->wnd());
+	SetFocus(_view->Wnd());
 }
 
 void CBrowserWnd::OnSize(int width, int height)
@@ -132,11 +132,11 @@ void CBrowserWnd::OnSize(int width, int height)
 #else
 	int toolbarHeight = 0;
 #endif
-	SetWindowPos(_view->wnd(), NULL, rcClient.left, rcClient.top + toolbarHeight, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - toolbarHeight, SWP_NOZORDER);
-	UpdateWindow(_view->wnd());
+	SetWindowPos(_view->Wnd(), NULL, rcClient.left, rcClient.top + toolbarHeight, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - toolbarHeight, SWP_NOZORDER);
+	UpdateWindow(_view->Wnd());
 #ifndef NO_TOOLBAR
-	SetWindowPos(_toolbar->wnd(), NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, toolbar_height, SWP_NOZORDER);
-	UpdateWindow(_toolbar->wnd());
+	SetWindowPos(_toolbar->Wnd(), NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, toolbar_height, SWP_NOZORDER);
+	UpdateWindow(_toolbar->Wnd());
 #endif
 }
 
@@ -153,38 +153,38 @@ void CBrowserWnd::Create()
 void CBrowserWnd::Open(LPCWSTR path)
 {
 	if (_view)
-		_view->open(path, true);
+		_view->Open(path, true);
 }
 
 void CBrowserWnd::Back()
 {
 	if (_view)
-		_view->back();
+		_view->Back();
 }
 
 void CBrowserWnd::Forward()
 {
 	if (_view)
-		_view->forward();
+		_view->Forward();
 }
 
 void CBrowserWnd::Reload()
 {
 	if (_view)
-		_view->refresh();
+		_view->Refresh();
 }
 
 void CBrowserWnd::CalcTime(int calcRepeat)
 {
 	if (_view)
-		_view->render(TRUE, TRUE, calcRepeat);
+		_view->Render(TRUE, TRUE, calcRepeat);
 }
 
 void CBrowserWnd::OnPageLoaded(LPCWSTR url)
 {
 	if (_view)
-		SetFocus(_view->wnd());
+		SetFocus(_view->Wnd());
 #ifndef NO_TOOLBAR
-	_toolbar->on_page_loaded(url);
+	_toolbar->OnPageLoaded(url);
 #endif
 }

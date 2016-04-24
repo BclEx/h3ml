@@ -273,7 +273,7 @@ void cairo_container::draw_background( litehtml::uint_ptr hdc, const litehtml::b
 		image_ptr new_img;
 		if(bg.image_size.width != bgbmp->getWidth() || bg.image_size.height != bgbmp->getHeight())
 		{
-			new_img = image_ptr(new CTxDIB);
+			new_img = image_ptr(new CTxDib);
 			bgbmp->resample(bg.image_size.width, bg.image_size.height, new_img.get());
 			bgbmp = new_img;
 		}
@@ -769,7 +769,7 @@ const litehtml::tchar_t* cairo_container::get_default_font_name() const
 	return _t("Times New Roman");
 }
 
-void cairo_container::draw_txdib( cairo_t* cr, CTxDIB* bmp, int x, int y, int cx, int cy )
+void cairo_container::draw_txdib( cairo_t* cr, CTxDib* bmp, int x, int y, int cx, int cy )
 {
 	cairo_save(cr);
 
@@ -778,7 +778,7 @@ void cairo_container::draw_txdib( cairo_t* cr, CTxDIB* bmp, int x, int y, int cx
 
 	cairo_surface_t* img = NULL;
 
-	CTxDIB rbmp;
+	CTxDib rbmp;
 
 	if(cx != bmp->getWidth() || cy != bmp->getHeight())
 	{

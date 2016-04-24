@@ -7,16 +7,18 @@
     <ClCompile Include="litebrowser.cpp" />
     <ClCompile Include="sl_edit.cpp" />
     <ClCompile Include="ToolbarWnd.cpp" />
-    <ClCompile Include="tordexhttp.cpp" />
     <ClCompile Include="TxThread.cpp" />
-    <ClCompile Include="web_history.cpp" />
-    <ClCompile Include="web_page.cpp" />
     <ClCompile Include="..\LiteHtml\containers\cairo\cairo_container.cpp">
       <Filter>LiteHtml</Filter>
     </ClCompile>
     <ClCompile Include="..\LiteHtml\containers\cairo\cairo_font.cpp">
       <Filter>LiteHtml</Filter>
     </ClCompile>
+    <ClCompile Include="Dib.cpp" />
+    <ClCompile Include="TxDib.cpp" />
+    <ClCompile Include="WebPage.cpp" />
+    <ClCompile Include="WebHistory.cpp" />
+    <ClCompile Include="Http.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BrowserWnd.h" />
@@ -27,10 +29,7 @@
     <ClInclude Include="litebrowser.h" />
     <ClInclude Include="sl_edit.h" />
     <ClInclude Include="ToolbarWnd.h" />
-    <ClInclude Include="tordexhttp.h" />
     <ClInclude Include="TxThread.h" />
-    <ClInclude Include="web_history.h" />
-    <ClInclude Include="web_page.h" />
     <ClInclude Include="..\LiteHtml\containers\cairo\cairo_container.h">
       <Filter>LiteHtml</Filter>
     </ClInclude>
@@ -39,6 +38,11 @@
     </ClInclude>
     <ClInclude Include="targetver.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Dib.h" />
+    <ClInclude Include="TxDib.h" />
+    <ClInclude Include="WebPage.h" />
+    <ClInclude Include="WebHistory.h" />
+    <ClInclude Include="Http.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiteBrowser.rc" />

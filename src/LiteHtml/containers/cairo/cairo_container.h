@@ -10,8 +10,8 @@
 #include <cairo.h>
 #include <cairo-win32.h>
 #include <litehtml.h>
-#include <dib.h>
-#include <txdib.h>
+#include <Dib.h>
+#include <TxDib.h>
 
 #ifdef LITEHTML_UTF8
 #define t_make_url	make_url_utf8
@@ -22,7 +22,7 @@
 struct cairo_clip_box
 {
 	typedef std::vector<cairo_clip_box> vector;
-	litehtml::position	box;
+	litehtml::position box;
 	litehtml::border_radiuses radius;
 
 	cairo_clip_box(const litehtml::position& vBox, litehtml::border_radiuses vRad)
@@ -47,7 +47,7 @@ struct cairo_clip_box
 class cairo_container :	public litehtml::document_container
 {
 public:
-	typedef std::shared_ptr<CTxDIB>				image_ptr;
+	typedef std::shared_ptr<CTxDib>				image_ptr;
 	typedef std::map<std::wstring, image_ptr>	images_map;
 
 protected:
@@ -99,11 +99,11 @@ protected:
 
 	void								set_color(cairo_t* cr, litehtml::web_color color)	{ cairo_set_source_rgba(cr, color.red / 255.0, color.green / 255.0, color.blue / 255.0, color.alpha / 255.0); }
 private:
-	simpledib::dib*						get_dib(litehtml::uint_ptr hdc)	{ return (simpledib::dib*) hdc;				}
+	Dib*						get_dib(litehtml::uint_ptr hdc)	{ return (Dib *)hdc; }
 	void								apply_clip(cairo_t* cr);
 	bool								add_path_arc(cairo_t* cr, double x, double y, double rx, double ry, double a1, double a2, bool neg);
 
-	void								draw_txdib(cairo_t* cr, CTxDIB* bmp, int x, int y, int cx, int cy);
+	void								draw_txdib(cairo_t* cr, CTxDib* bmp, int x, int y, int cx, int cy);
 	void								lock_images_cache();
 	void								unlock_images_cache();
 };

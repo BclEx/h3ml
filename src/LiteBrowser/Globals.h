@@ -15,19 +15,14 @@
 #include <litehtml.h>
 #include <winhttp.h>
 #include <algorithm>
+#include "TxDib.h"
+#include "Dib.h"
 
-//// include TxDIB project
-//#include <TxDIB.h>
-//#pragma comment(lib, "txdib.lib")
 //
 // include CAIRO project
 #include <cairo.h>
 #include <cairo-win32.h>
 #pragma comment(lib, "cairo.lib")
 //
-//// include SIMPLEDIB project
-//#include <dib.h>
-//#pragma comment(lib, "simpledib.lib")
-//
-//#pragma comment(lib, "shlwapi.lib")
-//#pragma comment(lib, "Msimg32.lib")
+#pragma comment(lib, "shlwapi.lib")
+#pragma comment(lib, "Msimg32.lib")

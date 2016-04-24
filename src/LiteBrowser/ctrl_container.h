@@ -3,5 +3,5 @@
 class cotrols_container
 {
 public:
-	virtual HWND get_hwnd() = 0;
+	virtual HWND getHwnd() = 0;
 };

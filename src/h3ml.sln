@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Oculus", "Oculus\Oculus.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LiteHtml", "LiteHtml\LiteHtml.vcxproj", "{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LiteBrowser", "LiteBrowser\LiteBrowser.vcxproj", "{A153723A-E3F6-49D7-B44A-FAD2C295F0F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Debug|Win32.Build.0 = Debug|Win32
 		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Release|Win32.ActiveCfg = Release|Win32
 		{2E1EDB69-FFEB-4DF8-8484-AAAF03118A51}.Release|Win32.Build.0 = Release|Win32
+		{A153723A-E3F6-49D7-B44A-FAD2C295F0F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A153723A-E3F6-49D7-B44A-FAD2C295F0F0}.Debug|Win32.Build.0 = Debug|Win32
+		{A153723A-E3F6-49D7-B44A-FAD2C295F0F0}.Release|Win32.ActiveCfg = Release|Win32
+		{A153723A-E3F6-49D7-B44A-FAD2C295F0F0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

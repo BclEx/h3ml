@@ -316,7 +316,7 @@ void CToolbarWnd::make_url( LPCWSTR url, LPCWSTR basepath, std::wstring& out )
 
 cairo_container::image_ptr CToolbarWnd::get_image(LPCWSTR url, bool redraw_on_ready)
 {
-	cairo_container::image_ptr img = cairo_container::image_ptr(new CTxDIB);
+	cairo_container::image_ptr img = cairo_container::image_ptr(new CTxDib);
 	if(!img->load(FindResource(m_hInst, url, RT_HTML), m_hInst))
 	{
 		img = nullptr;
