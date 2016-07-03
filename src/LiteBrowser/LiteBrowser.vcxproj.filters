@@ -38,11 +38,11 @@
     </ClInclude>
     <ClInclude Include="targetver.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Dib.h" />
-    <ClInclude Include="TxDib.h" />
     <ClInclude Include="WebPage.h" />
     <ClInclude Include="WebHistory.h" />
     <ClInclude Include="Http.h" />
+    <ClInclude Include="include\Dib.h" />
+    <ClInclude Include="include\TxDib.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiteBrowser.rc" />

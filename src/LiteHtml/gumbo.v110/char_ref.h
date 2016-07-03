@@ -21,7 +21,9 @@
 #ifndef GUMBO_CHAR_REF_H_
 #define GUMBO_CHAR_REF_H_
 
+#ifndef _MSC_VER
 #include <stdbool.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

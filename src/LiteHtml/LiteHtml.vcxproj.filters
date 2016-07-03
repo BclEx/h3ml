@@ -68,9 +68,6 @@
     <ClInclude Include="gumbo\string_piece.h">
       <Filter>gumbo</Filter>
     </ClInclude>
-    <ClInclude Include="gumbo\strings.h">
-      <Filter>gumbo</Filter>
-    </ClInclude>
     <ClInclude Include="gumbo\tag_enum.h">
       <Filter>gumbo</Filter>
     </ClInclude>
@@ -142,37 +139,37 @@
     <ClCompile Include="table.cpp" />
     <ClCompile Include="utf8_strings.cpp" />
     <ClCompile Include="web_color.cpp" />
-    <ClCompile Include="gumbo\vector.cpp">
+    <ClCompile Include="gumbo\attribute.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\util.cpp">
+    <ClCompile Include="gumbo\char_ref.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\utf8.cpp">
+    <ClCompile Include="gumbo\error.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\tokenizer.cpp">
+    <ClCompile Include="gumbo\parser.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\tag.cpp">
+    <ClCompile Include="gumbo\string_buffer.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\error.cpp">
+    <ClCompile Include="gumbo\string_piece.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\attribute.cpp">
+    <ClCompile Include="gumbo\tag.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\char_ref.cpp">
+    <ClCompile Include="gumbo\tokenizer.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\string_piece.cpp">
+    <ClCompile Include="gumbo\utf8.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\string_buffer.cpp">
+    <ClCompile Include="gumbo\util.c">
       <Filter>gumbo</Filter>
     </ClCompile>
-    <ClCompile Include="gumbo\parser.cpp">
+    <ClCompile Include="gumbo\vector.c">
       <Filter>gumbo</Filter>
     </ClCompile>
   </ItemGroup>

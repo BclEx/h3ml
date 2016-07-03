@@ -55,9 +55,9 @@ int block_box::top_margin()
 	return (_element && _element->collapse_top_margin() ? _element->_margins.top : 0);
 }
 
-int block_box::botto_margin()
+int block_box::bottom_margin()
 {
-	return (_element && _element->collapse_botto_margin() ? _element->_margins.bottom : 0);
+	return (_element && _element->collapse_bottom_margin() ? _element->_margins.bottom : 0);
 }
 
 void block_box::y_shift(int shift)
@@ -275,7 +275,7 @@ int line_box::top_margin()
 	return 0;
 }
 
-int line_box::botto_margin()
+int line_box::bottom_margin()
 {
 	return 0;
 }

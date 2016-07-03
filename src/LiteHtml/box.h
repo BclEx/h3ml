@@ -42,7 +42,7 @@ namespace litehtml
 		virtual int baseline() = 0;
 		virtual void get_elements(elements_vector &els) = 0;
 		virtual int top_margin() = 0;
-		virtual int botto_margin() = 0;
+		virtual int bottom_margin() = 0;
 		virtual void y_shift(int shift) = 0;
 		virtual void new_width(int left, int right, elements_vector &els) = 0;
 	};
@@ -69,7 +69,7 @@ namespace litehtml
 		virtual int baseline();
 		virtual void get_elements(elements_vector &els);
 		virtual int top_margin();
-		virtual int botto_margin();
+		virtual int bottom_margin();
 		virtual void y_shift(int shift);
 		virtual void new_width(int left, int right, elements_vector &els);
 	};
@@ -107,7 +107,7 @@ namespace litehtml
 		virtual int baseline();
 		virtual void get_elements(elements_vector &els);
 		virtual int top_margin();
-		virtual int botto_margin();
+		virtual int bottom_margin();
 		virtual void y_shift(int shift);
 		virtual void new_width(int left, int right, elements_vector &els);
 	private:

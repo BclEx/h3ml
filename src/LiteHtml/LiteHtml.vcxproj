@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,13 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -125,7 +125,6 @@
     <ClInclude Include="gumbo\gumbo.h" />
     <ClInclude Include="gumbo\insertion_mode.h" />
     <ClInclude Include="gumbo\parser.h" />
-    <ClInclude Include="gumbo\strings.h" />
     <ClInclude Include="gumbo\string_buffer.h" />
     <ClInclude Include="gumbo\string_piece.h" />
     <ClInclude Include="gumbo\tag_enum.h" />
@@ -167,6 +166,17 @@
     <ClCompile Include="el_text.cpp" />
     <ClCompile Include="el_title.cpp" />
     <ClCompile Include="el_tr.cpp" />
+    <ClCompile Include="gumbo\attribute.c" />
+    <ClCompile Include="gumbo\char_ref.c" />
+    <ClCompile Include="gumbo\error.c" />
+    <ClCompile Include="gumbo\parser.c" />
+    <ClCompile Include="gumbo\string_buffer.c" />
+    <ClCompile Include="gumbo\string_piece.c" />
+    <ClCompile Include="gumbo\tag.c" />
+    <ClCompile Include="gumbo\tokenizer.c" />
+    <ClCompile Include="gumbo\utf8.c" />
+    <ClCompile Include="gumbo\util.c" />
+    <ClCompile Include="gumbo\vector.c" />
     <ClCompile Include="html.cpp" />
     <ClCompile Include="html_tag.cpp" />
     <ClCompile Include="iterators.cpp" />
@@ -176,17 +186,6 @@
     <ClCompile Include="table.cpp" />
     <ClCompile Include="utf8_strings.cpp" />
     <ClCompile Include="web_color.cpp" />
-    <ClCompile Include="gumbo\attribute.cpp" />
-    <ClCompile Include="gumbo\char_ref.cpp" />
-    <ClCompile Include="gumbo\error.cpp" />
-    <ClCompile Include="gumbo\parser.cpp" />
-    <ClCompile Include="gumbo\string_buffer.cpp" />
-    <ClCompile Include="gumbo\string_piece.cpp" />
-    <ClCompile Include="gumbo\tag.cpp" />
-    <ClCompile Include="gumbo\tokenizer.cpp" />
-    <ClCompile Include="gumbo\utf8.cpp" />
-    <ClCompile Include="gumbo\util.cpp" />
-    <ClCompile Include="gumbo\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\litehtml.h" />

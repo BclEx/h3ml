@@ -47,7 +47,9 @@
 #define fileno _fileno
 #endif
 
+#ifndef _MSC_VER
 #include <stdbool.h>
+#endif
 #include <stddef.h>
 
 #ifdef __cplusplus
@@ -414,6 +416,8 @@ typedef enum {
    */
   GUMBO_INSERTION_FOSTER_PARENTED = 1 << 10,
 } GumboParseFlags;
+__forceinline void operator|=(GumboParseFlags &a, int b) { a = (GumboParseFlags)(a | b); }
+__forceinline void operator&=(GumboParseFlags &a, int b) { a = (GumboParseFlags)(a & b); }
 
 /**
  * Information specific to document nodes.

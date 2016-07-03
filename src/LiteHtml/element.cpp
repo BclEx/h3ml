@@ -57,7 +57,7 @@ bool element::collapse_top_margin() const
 	return (!_borders.top && !_padding.top && in_normal_flow() && get_float() == float_none && _margins.top >= 0 && have_parent());
 }
 
-bool element::collapse_botto_margin() const
+bool element::collapse_bottom_margin() const
 {
 	return (!_borders.bottom && !_padding.bottom && in_normal_flow() && get_float() == float_none && _margins.bottom >= 0 && have_parent());
 }

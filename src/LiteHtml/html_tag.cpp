@@ -342,16 +342,16 @@ void html_tag::parse_styles(bool is_reparse)
 	_css_borders.radius.top_right_x.fromString(get_style_property(_t("border-top-right-radius-x"), false, _t("0")));
 	_css_borders.radius.top_right_y.fromString(get_style_property(_t("border-top-right-radius-y"), false, _t("0")));
 
-	_css_borders.radius.botto_right_x.fromString(get_style_property(_t("border-bottom-right-radius-x"), false, _t("0")));
-	_css_borders.radius.botto_right_y.fromString(get_style_property(_t("border-bottom-right-radius-y"), false, _t("0")));
+	_css_borders.radius.bottom_right_x.fromString(get_style_property(_t("border-bottom-right-radius-x"), false, _t("0")));
+	_css_borders.radius.bottom_right_y.fromString(get_style_property(_t("border-bottom-right-radius-y"), false, _t("0")));
 
-	_css_borders.radius.botto_left_x.fromString(get_style_property(_t("border-bottom-left-radius-x"), false, _t("0")));
-	_css_borders.radius.botto_left_y.fromString(get_style_property(_t("border-bottom-left-radius-y"), false, _t("0")));
+	_css_borders.radius.bottom_left_x.fromString(get_style_property(_t("border-bottom-left-radius-x"), false, _t("0")));
+	_css_borders.radius.bottom_left_y.fromString(get_style_property(_t("border-bottom-left-radius-y"), false, _t("0")));
 
-	doc->cvt_units(_css_borders.radius.botto_left_x, _font_size);
-	doc->cvt_units(_css_borders.radius.botto_left_y, _font_size);
-	doc->cvt_units(_css_borders.radius.botto_right_x, _font_size);
-	doc->cvt_units(_css_borders.radius.botto_right_y, _font_size);
+	doc->cvt_units(_css_borders.radius.bottom_left_x, _font_size);
+	doc->cvt_units(_css_borders.radius.bottom_left_y, _font_size);
+	doc->cvt_units(_css_borders.radius.bottom_right_x, _font_size);
+	doc->cvt_units(_css_borders.radius.bottom_right_y, _font_size);
 	doc->cvt_units(_css_borders.radius.top_left_x, _font_size);
 	doc->cvt_units(_css_borders.radius.top_left_y, _font_size);
 	doc->cvt_units(_css_borders.radius.top_right_x, _font_size);
@@ -1504,15 +1504,15 @@ void html_tag::draw_background( uint_ptr hdc, int x, int y, const position* clip
 				css_borders bdr;
 				// set left borders radius for the first box
 				if (box == boxes.begin()) {
-					bdr.radius.botto_left_x	= _css_borders.radius.botto_left_x;
-					bdr.radius.botto_left_y	= _css_borders.radius.botto_left_y;
+					bdr.radius.bottom_left_x	= _css_borders.radius.bottom_left_x;
+					bdr.radius.bottom_left_y	= _css_borders.radius.bottom_left_y;
 					bdr.radius.top_left_x = _css_borders.radius.top_left_x;
 					bdr.radius.top_left_y = _css_borders.radius.top_left_y;
 				}
 				// set right borders radius for the last box
 				if (box == boxes.end() - 1) {
-					bdr.radius.botto_right_x = _css_borders.radius.botto_right_x;
-					bdr.radius.botto_right_y = _css_borders.radius.botto_right_y;
+					bdr.radius.bottom_right_x = _css_borders.radius.bottom_right_x;
+					bdr.radius.bottom_right_y = _css_borders.radius.bottom_right_y;
 					bdr.radius.top_right_x = _css_borders.radius.top_right_x;
 					bdr.radius.top_right_y = _css_borders.radius.top_right_y;
 				}
@@ -1697,7 +1697,7 @@ int html_tag::place_element(const element::ptr &el, int max_width)
 					}
 				}
 				else {
-					int prev_margin = _boxes[_boxes.size() - 2]->botto_margin();
+					int prev_margin = _boxes[_boxes.size() - 2]->bottom_margin();
 					int shift = (prev_margin > el->margin_top() ? el->margin_top() : prev_margin);
 					if (shift >= 0) {
 						line_ctx.top -= shift;
@@ -2887,9 +2887,9 @@ int html_tag::render_box(int x, int y, int max_width, bool second_pass /*= false
 			if (_margins.top != old_top)
 				update_floats(_margins.top - old_top, shared_from_this());
 		}
-		if (collapse_botto_margin()) {
-			_margins.bottom = std::max(_boxes.back()->botto_margin(), _margins.bottom);
-			_pos.height = _boxes.back()->bottom() - _boxes.back()->botto_margin();
+		if (collapse_bottom_margin()) {
+			_margins.bottom = std::max(_boxes.back()->bottom_margin(), _margins.bottom);
+			_pos.height = _boxes.back()->bottom() - _boxes.back()->bottom_margin();
 		}
 		else
 			_pos.height = _boxes.back()->bottom();

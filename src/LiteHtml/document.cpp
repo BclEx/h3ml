@@ -229,7 +229,7 @@ int document::cvt_units(const tchar_t *str, int fontSize, bool *is_percent /*= n
 	if (!str) return 0;
 	css_length val;
 	val.fromString(str);
-	if(is_percent && val.units() == css_units_percentage && !val.is_predefined())
+	if (is_percent && val.units() == css_units_percentage && !val.is_predefined())
 		*is_percent = true;
 	return cvt_units(val, fontSize);
 }

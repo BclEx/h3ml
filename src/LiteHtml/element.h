@@ -72,7 +72,7 @@ namespace litehtml
 		bool is_inline_box() const;
 		position get_placement() const;
 		bool collapse_top_margin() const;
-		bool collapse_botto_margin() const;
+		bool collapse_bottom_margin() const;
 		bool is_positioned() const;
 
 		bool skip();
