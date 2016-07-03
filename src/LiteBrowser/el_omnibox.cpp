@@ -29,7 +29,7 @@ void el_omnibox::set_url(LPCWSTR url)
 	_edit.setText(url);
 }
 
-void el_omnibox::draw(litehtml::uint_ptr hdc, int x, int y, const litehtml::position* clip)
+void el_omnibox::draw(uint_ptr hdc, int x, int y, const position* clip)
 {
 	html_tag::draw(hdc, x, y, clip);
 	_edit.draw((cairo_t*)hdc);

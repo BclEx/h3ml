@@ -44,5 +44,4 @@ public:
 	BOOL OnLButtonUp(int x, int y);
 	BOOL OnLButtonDblClick(int x, int y);
 	BOOL OnMouseMove(int x, int y);
-
 };

@@ -18,11 +18,12 @@
 #include <TxDib.h>
 #include <Dib.h>
 
-//
-// include CAIRO project
+// include CAIRO
 #include <cairo.h>
 #include <cairo-win32.h>
 #pragma comment(lib, "cairo.lib")
+// include FreeImage
+#pragma comment(lib, "freeimage.lib")
 //
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Msimg32.lib")

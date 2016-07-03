@@ -66,5 +66,5 @@ private:
 
 	void	drawText(cairo_t *cr, LPCWSTR text, int cbText, LPRECT rcText, web_color textColor);
 	void	getTextExtentPoint(LPCWSTR text, int cbText, LPSIZE sz);
-	void	set_color(cairo_t *cr, litehtml::web_color color) { cairo_set_source_rgba(cr, color.red / 255.0, color.green / 255.0, color.blue / 255.0, color.alpha / 255.0); }
+	void	set_color(cairo_t *cr, web_color color) { cairo_set_source_rgba(cr, color.red / 255.0, color.green / 255.0, color.blue / 255.0, color.alpha / 255.0); }
 };

@@ -22,7 +22,7 @@ SingleLineEditCtrl::SingleLineEditCtrl(HWND parent, cairo_container *container) 
 	_lineHeight = 0;
 }
 
-SingleLineEditCtrl::~SingleLineEditCtrl(void)
+SingleLineEditCtrl::~SingleLineEditCtrl()
 {
 	Stop();
 }
@@ -298,7 +298,7 @@ void SingleLineEditCtrl::draw(cairo_t *cr)
 			if (rcText.right > _rcText.right)
 				rcText.right = _rcText.right;
 			COLORREF clr = GetSysColor(COLOR_HIGHLIGHTTEXT);
-			drawText(cr, _text.c_str() + selStart, selEnd - selStart, &rcText, litehtml::web_color(GetRValue(clr), GetGValue(clr), GetBValue(clr)));
+			drawText(cr, _text.c_str() + selStart, selEnd - selStart, &rcText, web_color(GetRValue(clr), GetGValue(clr), GetBValue(clr)));
 
 			left += sz.cx;
 		}
@@ -426,7 +426,7 @@ void SingleLineEditCtrl::fillSelRect(cairo_t* cr, LPRECT rcFill)
 	cairo_save(cr);
 
 	COLORREF clr = GetSysColor(COLOR_HIGHLIGHT);
-	litehtml::web_color color(GetRValue(clr), GetGValue(clr), GetBValue(clr));
+	web_color color(GetRValue(clr), GetGValue(clr), GetBValue(clr));
 
 	cairo_set_source_rgba(cr, color.red / 255.0, color.green / 255.0, color.blue / 255.0, color.alpha / 255.0);
 	cairo_rectangle(cr, rcFill->left, rcFill->top, rcFill->right - rcFill->left, rcFill->bottom - rcFill->top);

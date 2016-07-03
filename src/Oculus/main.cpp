@@ -3,10 +3,9 @@
 using namespace OVR;
 
 // return true to retry later (e.g. after display lost)
-Scene *_roomScene = nullptr; 
+Scene *_roomScene = nullptr;
 static bool MainLoop(bool retryCreate)
 {
-
 	ovrSession session;
 	ovrGraphicsLuid luid;
 	ovrResult result = ovr_Create(&session, &luid);
@@ -28,7 +27,7 @@ static bool MainLoop(bool retryCreate)
 	{
 		ovrSizei idealTextureSize = ovr_GetFovTextureSize(session, ovrEyeType(eye), hmdDesc.DefaultEyeFov[eye], 1);
 		eyeRenderTexture[eye] = new TextureBuffer(session, true, true, idealTextureSize, 1, NULL, 1);
-		eyeDepthBuffer[eye]   = new DepthBuffer(eyeRenderTexture[eye]->GetSize(), 0);
+		eyeDepthBuffer[eye] = new DepthBuffer(eyeRenderTexture[eye]->GetSize(), 0);
 
 		if (!eyeRenderTexture[eye]->TextureChain)
 		{
@@ -78,16 +77,16 @@ static bool MainLoop(bool retryCreate)
 	while (Platform.HandleMessages())
 	{
 		// Keyboard inputs to adjust player orientation
-		static float Yaw(3.141592f);  
+		static float Yaw(3.141592f);
 		if (Platform.Key[VK_LEFT])  Yaw += 0.02f;
 		if (Platform.Key[VK_RIGHT]) Yaw -= 0.02f;
 
 		// Keyboard inputs to adjust player position
-		static Vector3f Pos2(0.0f,0.0f,-5.0f);
-		if (Platform.Key['W'] || Platform.Key[VK_UP])     Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(0,0,-0.05f));
-		if (Platform.Key['S'] || Platform.Key[VK_DOWN])   Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(0,0,+0.05f));
-		if (Platform.Key['D'])                          Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(+0.05f,0,0));
-		if (Platform.Key['A'])                          Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(-0.05f,0,0));
+		static Vector3f Pos2(0.0f, 0.0f, -5.0f);
+		if (Platform.Key['W'] || Platform.Key[VK_UP])		Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(0, 0, -0.05f));
+		if (Platform.Key['S'] || Platform.Key[VK_DOWN])		Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(0, 0, +0.05f));
+		if (Platform.Key['D'])								Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(+0.05f, 0, 0));
+		if (Platform.Key['A'])								Pos2 += Matrix4f::RotationY(Yaw).Transform(Vector3f(-0.05f, 0, 0));
 
 		// Animate the cube
 		static float cubeClock = 0;
@@ -139,16 +138,16 @@ static bool MainLoop(bool retryCreate)
 		// Do distortion rendering, Present and flush/sync
 
 		ovrLayerEyeFov ld;
-		ld.Header.Type  = ovrLayerType_EyeFov;
+		ld.Header.Type = ovrLayerType_EyeFov;
 		ld.Header.Flags = ovrLayerFlag_TextureOriginAtBottomLeft;   // Because OpenGL.
 
 		for (int eye = 0; eye < 2; ++eye)
 		{
 			ld.ColorTexture[eye] = eyeRenderTexture[eye]->TextureChain;
-			ld.Viewport[eye]     = Recti(eyeRenderTexture[eye]->GetSize());
-			ld.Fov[eye]          = hmdDesc.DefaultEyeFov[eye];
-			ld.RenderPose[eye]   = EyeRenderPose[eye];
-			ld.SensorSampleTime  = sensorSampleTime;
+			ld.Viewport[eye] = Recti(eyeRenderTexture[eye]->GetSize());
+			ld.Fov[eye] = hmdDesc.DefaultEyeFov[eye];
+			ld.RenderPose[eye] = EyeRenderPose[eye];
+			ld.SensorSampleTime = sensorSampleTime;
 		}
 
 		ovrLayerHeader* layers = &ld.Header;

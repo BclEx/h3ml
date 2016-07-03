@@ -9,7 +9,7 @@ Dib::Dib()
 	_ownData = FALSE;
 	_width = 0;
 	_height = 0;
-	_hTargetDC	= NULL;
+	_hTargetDC = NULL;
 	_restoreViewPort = FALSE;
 }
 
@@ -40,19 +40,19 @@ void Dib::Destroy(bool delBmp)
 bool Dib::Create(int width, int height, bool topdowndib /*= false*/)
 {
 	Destroy();
-	BITMAPINFO bmpInfo; 
-	bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER); 
-	bmpInfo.bmiHeader.biWidth = width; 
-	bmpInfo.bmiHeader.biHeight = height * (topdowndib ? -1 : 1); 
-	bmpInfo.bmiHeader.biPlanes = 1; 
-	bmpInfo.bmiHeader.biBitCount = 32; 
-	bmpInfo.bmiHeader.biCompression = BI_RGB; 
-	bmpInfo.bmiHeader.biSizeImage = 0; 
-	bmpInfo.bmiHeader.biXPelsPerMeter = 0; 
-	bmpInfo.bmiHeader.biYPelsPerMeter = 0; 
-	bmpInfo.bmiHeader.biClrUsed = 0; 
-	bmpInfo.bmiHeader.biClrImportant = 0; 
-	_hdc = CreateCompatibleDC(NULL); 
+	BITMAPINFO bmpInfo;
+	bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmpInfo.bmiHeader.biWidth = width;
+	bmpInfo.bmiHeader.biHeight = height * (topdowndib ? -1 : 1);
+	bmpInfo.bmiHeader.biPlanes = 1;
+	bmpInfo.bmiHeader.biBitCount = 32;
+	bmpInfo.bmiHeader.biCompression = BI_RGB;
+	bmpInfo.bmiHeader.biSizeImage = 0;
+	bmpInfo.bmiHeader.biXPelsPerMeter = 0;
+	bmpInfo.bmiHeader.biYPelsPerMeter = 0;
+	bmpInfo.bmiHeader.biClrUsed = 0;
+	bmpInfo.bmiHeader.biClrImportant = 0;
+	_hdc = CreateCompatibleDC(NULL);
 	_bmp = ::CreateDIBSection(_hdc, &bmpInfo, DIB_RGB_COLORS, (LPVOID *)&_bits, 0, 0);
 	if (_bits)
 		_oldBmp = (HBITMAP)::SelectObject(_hdc, _bmp);
@@ -121,7 +121,7 @@ void Dib::Draw(HDC hdc, LPRECT rcDraw)
 	bf.BlendFlags = 0;
 	bf.AlphaFormat = AC_SRC_ALPHA;
 	bf.SourceConstantAlpha = 255;
-	AlphaBlend(hdc, 
+	AlphaBlend(hdc,
 		rcDraw->left, rcDraw->top,
 		rcDraw->right - rcDraw->left,
 		rcDraw->bottom - rcDraw->top, _hdc,
@@ -156,8 +156,8 @@ void Dib::EndPaint(bool copy)
 			_rcTarget.right - _rcTarget.left,
 			_rcTarget.bottom - _rcTarget.top, _hdc,
 			0, 0,
-			_rcTarget.right	- _rcTarget.left,
-			_rcTarget.bottom	- _rcTarget.top,
+			_rcTarget.right - _rcTarget.left,
+			_rcTarget.bottom - _rcTarget.top,
 			bf);
 	}
 	else {

@@ -19,8 +19,8 @@ public:
 	Dib();
 	~Dib();
 
-	int Width() const { return _width; } 
-	int Height() const { return _height; } 
+	int Width() const { return _width; }
+	int Height() const { return _height; }
 	HDC Hdc() const { return _hdc; }
 	HBITMAP Bmp() const { return _bmp; }
 	LPRGBQUAD Bits() const { return _bits; }

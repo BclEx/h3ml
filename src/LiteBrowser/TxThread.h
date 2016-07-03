@@ -8,8 +8,8 @@ class TxThread
 
 	static DWORD WINAPI sThreadProc(LPVOID lpParameter);
 public:
-	TxThread(void);
-	virtual ~TxThread(void);
+	TxThread();
+	virtual ~TxThread();
 	virtual DWORD ThreadProc() = 0;
 
 	DWORD GetID() { return _trdID; }

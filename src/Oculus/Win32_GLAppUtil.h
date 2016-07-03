@@ -32,7 +32,6 @@ using namespace OVR;
 #define OVR_DEBUG_LOG(x)
 #endif
 
-
 //---------------------------------------------------------------------------------------
 struct DepthBuffer
 {
@@ -110,7 +109,7 @@ struct TextureBuffer
 			int length = 0;
 			ovr_GetTextureSwapChainLength(session, TextureChain, &length);
 
-			if(OVR_SUCCESS(result))
+			if (OVR_SUCCESS(result))
 			{
 				for (int i = 0; i < length; ++i)
 				{
@@ -444,7 +443,7 @@ struct OGL
 		return Running;
 	}
 
-	void Run(bool (*MainLoop)(bool retryCreate))
+	void Run(bool(*MainLoop)(bool retryCreate))
 	{
 		// false => just fail on any error
 		VALIDATE(MainLoop(false), "Oculus Rift not detected.");
@@ -669,8 +668,8 @@ struct Model
 			float dist3 = (vvv.Pos - Vector3f(-4, 3, 25)).Length();
 			int   bri = rand() % 160;
 			float B = ((c >> 16) & 0xff) * (bri + 192.0f * (0.65f + 8 / dist1 + 1 / dist2 + 4 / dist3)) / 255.0f;
-			float G = ((c >>  8) & 0xff) * (bri + 192.0f * (0.65f + 8 / dist1 + 1 / dist2 + 4 / dist3)) / 255.0f;
-			float R = ((c >>  0) & 0xff) * (bri + 192.0f * (0.65f + 8 / dist1 + 1 / dist2 + 4 / dist3)) / 255.0f;
+			float G = ((c >> 8) & 0xff) * (bri + 192.0f * (0.65f + 8 / dist1 + 1 / dist2 + 4 / dist3)) / 255.0f;
+			float R = ((c >> 0) & 0xff) * (bri + 192.0f * (0.65f + 8 / dist1 + 1 / dist2 + 4 / dist3)) / 255.0f;
 			vvv.C = (c & 0xff000000) +
 				((R > 255 ? 255 : DWORD(R)) << 16) +
 				((G > 255 ? 255 : DWORD(G)) << 8) +

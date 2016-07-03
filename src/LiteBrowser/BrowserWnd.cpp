@@ -22,7 +22,7 @@ BrowserWnd::BrowserWnd(HINSTANCE hInst)
 		wc.hInstance = _hInst;
 		wc.hIcon = NULL;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
+		wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 		wc.lpszMenuName = NULL;
 		wc.lpszClassName = BROWSERWND_CLASS;
 		RegisterClass(&wc);
@@ -115,8 +115,8 @@ void BrowserWnd::OnCreate()
 	RECT rcClient;
 	GetClientRect(_hWnd, &rcClient);
 #ifndef NO_TOOLBAR
-	_toolbar->Create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, m_hWnd);
-	_view->Create(rcClient.left, rcClient.top + m_toolbar->height(), rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - _toolbar->height(), _hWnd);
+	_toolbar->Create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, _hWnd);
+	_view->Create(rcClient.left, rcClient.top + _toolbar->Height(), rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - _toolbar->Height(), _hWnd);
 #else
 	_view->Create(rcClient.left, rcClient.top, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, _hWnd);
 #endif
@@ -128,14 +128,14 @@ void BrowserWnd::OnSize(int width, int height)
 	RECT rcClient;
 	GetClientRect(_hWnd, &rcClient);
 #ifndef NO_TOOLBAR
-	int toolbarHeight = _toolbar->set_width(rcClient.right - rcClient.left);
+	int toolbarHeight = _toolbar->SetWidth(rcClient.right - rcClient.left);
 #else
 	int toolbarHeight = 0;
 #endif
 	SetWindowPos(_view->Wnd(), NULL, rcClient.left, rcClient.top + toolbarHeight, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top - toolbarHeight, SWP_NOZORDER);
 	UpdateWindow(_view->Wnd());
 #ifndef NO_TOOLBAR
-	SetWindowPos(_toolbar->Wnd(), NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, toolbar_height, SWP_NOZORDER);
+	SetWindowPos(_toolbar->Wnd(), NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, toolbarHeight, SWP_NOZORDER);
 	UpdateWindow(_toolbar->Wnd());
 #endif
 }

@@ -3,8 +3,8 @@
 #include "BrowserWnd.h"
 #include "..\containers\cairo\cairo_font.h"
 
-#pragma comment( lib, "gdiplus.lib" )
-#pragma comment( lib, "shlwapi.lib" )
+#pragma comment(lib, "gdiplus.lib")
+#pragma comment(lib, "shlwapi.lib")
 
 using namespace Gdiplus;
 
@@ -25,7 +25,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		if (lpCmdLine && lpCmdLine[0])
 			wnd.Open(lpCmdLine);
 		else
-			wnd.Open(L"http://www.dmoz.org/");
+			wnd.Open(L"https://en.wikipedia.org/wiki/Main_Page");
 
 		MSG msg;
 		while (GetMessage(&msg, NULL, 0, 0)) {
