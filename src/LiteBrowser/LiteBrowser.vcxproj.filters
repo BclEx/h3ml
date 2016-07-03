@@ -41,8 +41,12 @@
     <ClInclude Include="WebPage.h" />
     <ClInclude Include="WebHistory.h" />
     <ClInclude Include="Http.h" />
-    <ClInclude Include="include\Dib.h" />
-    <ClInclude Include="include\TxDib.h" />
+    <ClInclude Include="include\Dib.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TxDib.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="LiteBrowser.rc" />
@@ -128,6 +132,9 @@
     </Filter>
     <Filter Include="LiteHtml">
       <UniqueIdentifier>{e9b8f7ca-79f5-4b00-84d0-a807ca5cd1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{4629796b-7fed-4102-99b0-0ccc82bdfeac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

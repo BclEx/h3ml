@@ -204,11 +204,11 @@ void html_tag::draw(uint_ptr hdc, int x, int y, const position *clip)
 			border_radiuses bdr_radius = _css_borders.radius.calc_percents(border_box.width, border_box.height);
 			bdr_radius -= _borders;
 			bdr_radius -= _padding;
-			get_document()->container()->set_clip(pos, bdr_radius, true, true);
+			get_document()->container()->SetClip(pos, bdr_radius, true, true);
 		}
 		draw_list_marker(hdc, pos);
 		if (_overflow > overflow_visible)
-			get_document()->container()->del_clip();
+			get_document()->container()->DelClip();
 	}
 }
 
@@ -401,7 +401,7 @@ void html_tag::parse_styles(bool is_reparse)
 			tstring url;
 			css::parse_css_url(list_image, url);
 			const tchar_t *list_image_baseurl = get_style_property(_t("list-style-image-baseurl"), true, 0);
-			doc->container()->load_image(url.c_str(), list_image_baseurl, true);
+			doc->container()->LoadImage(url.c_str(), list_image_baseurl, true);
 		}
 	}
 
@@ -1126,7 +1126,7 @@ void html_tag::parse_background()
 	css::parse_css_url(get_style_property(_t("background-image"), false, _t("")), _bg._image);
 	_bg._baseurl = get_style_property(_t("background-image-baseurl"), false, _t(""));
 	if (!_bg._image.empty())
-		doc->container()->load_image(_bg._image.c_str(), _bg._baseurl.empty() ? 0 : _bg._baseurl.c_str(), true);
+		doc->container()->LoadImage(_bg._image.c_str(), _bg._baseurl.empty() ? 0 : _bg._baseurl.c_str(), true);
 }
 
 void html_tag::add_positioned(const element::ptr &el)
@@ -1402,7 +1402,7 @@ void html_tag::init_font()
 	// initialize font size
 	const tchar_t *str = get_style_property(_t("font-size"), false, 0);
 
-	int doc_font_size = get_document()->container()->get_default_font_size();
+	int doc_font_size = get_document()->container()->GetDefaultFontSize();
 	element::ptr el_parent = parent();
 	int parent_sz = (el_parent ? el_parent->get_font_size() : doc_font_size);
 
@@ -1475,14 +1475,14 @@ void html_tag::draw_background( uint_ptr hdc, int x, int y, const position* clip
 			if (bg) {
 				background_paint bg_paint;
 				init_background_paint(pos, bg_paint, bg);
-				get_document()->container()->draw_background(hdc, bg_paint);
+				get_document()->container()->DrawBackground(hdc, bg_paint);
 			}
 			position border_box = pos;
 			border_box += _padding;
 			border_box += _borders;
 			borders bdr = _css_borders;
 			bdr.radius = _css_borders.radius.calc_percents(border_box.width, border_box.height);
-			get_document()->container()->draw_borders(hdc, bdr, border_box, !have_parent());
+			get_document()->container()->DrawBorders(hdc, bdr, border_box, !have_parent());
 		}
 	}
 	else {
@@ -1524,11 +1524,11 @@ void html_tag::draw_background( uint_ptr hdc, int x, int y, const position* clip
 					bdr.right = _css_borders.right;
 				if (bg) {
 					bg_paint.border_radius = bdr.radius.calc_percents(bg_paint.border_box.width, bg_paint.border_box.width);
-					get_document()->container()->draw_background(hdc, bg_paint);
+					get_document()->container()->DrawBackground(hdc, bg_paint);
 				}
 				borders b = bdr;
 				b.radius = bdr.radius.calc_percents(box->width, box->height);
-				get_document()->container()->draw_borders(hdc, b, *box, false);
+				get_document()->container()->DrawBorders(hdc, b, *box, false);
 			}
 		}
 	}
@@ -2058,7 +2058,7 @@ void html_tag::init_background_paint(position pos, background_paint &bg_paint, c
 	}
 
 	if (!bg_paint.image.empty()) {
-		get_document()->container()->get_image_size(bg_paint.image.c_str(), bg_paint.baseurl.c_str(), bg_paint.image_size);
+		get_document()->container()->GetImageSize(bg_paint.image.c_str(), bg_paint.baseurl.c_str(), bg_paint.image_size);
 		if (bg_paint.image_size.width && bg_paint.image_size.height) {
 			size img_new_sz = bg_paint.image_size;
 			double img_ar_width = (double)bg_paint.image_size.width / (double)bg_paint.image_size.height;
@@ -2123,7 +2123,7 @@ void html_tag::draw_list_marker(uint_ptr hdc, const position &pos)
 	if (list_image) {
 		css::parse_css_url(list_image, lm.image);
 		lm.baseurl = get_style_property(_t("list-style-image-baseurl"), true, 0);
-		get_document()->container()->get_image_size(lm.image.c_str(), lm.baseurl, img_size);
+		get_document()->container()->GetImageSize(lm.image.c_str(), lm.baseurl, img_size);
 	}
 	else
 		lm.baseurl = nullptr;
@@ -2147,7 +2147,7 @@ void html_tag::draw_list_marker(uint_ptr hdc, const position &pos)
 		lm.pos.x -= sz_font;
 	lm.color = get_color(_t("color"), true, web_color(0, 0, 0));
 	lm.marker_type = _list_style_type;
-	get_document()->container()->draw_list_marker(hdc, lm);
+	get_document()->container()->DrawListMarker(hdc, lm);
 }
 
 void html_tag::draw_children(uint_ptr hdc, int x, int y, const position *clip, draw_flag flag, int zindex)
@@ -2183,7 +2183,7 @@ int html_tag::get_zindex() const
 void html_tag::render_positioned(render_type rt)
 {
 	position wnd_position;
-	get_document()->container()->get_client_rect(wnd_position);
+	get_document()->container()->GetClientRect(wnd_position);
 
 	element_position el_position;
 	bool process;
@@ -2458,7 +2458,7 @@ void html_tag::calc_document_size(size &sz, int x /*= 0*/, int y /*= 0*/)
 		// root element (<html>) must to cover entire window
 		if (!have_parent()) {
 			position client_pos;
-			get_document()->container()->get_client_rect(client_pos);
+			get_document()->container()->GetClientRect(client_pos);
 			_pos.height = std::max(sz.height, client_pos.height) - content_margins_top() - content_margins_bottom();
 			_pos.width = std::max(sz.width, client_pos.width) - content_margins_left() - content_margins_right();
 		}
@@ -2929,7 +2929,7 @@ int html_tag::render_box(int x, int y, int max_width, bool second_pass /*= false
 			css::parse_css_url(list_image, url);
 			size sz;
 			const tchar_t *list_image_baseurl = get_style_property(_t("list-style-image-baseurl"), true, 0);
-			get_document()->container()->get_image_size(url.c_str(), list_image_baseurl, sz);
+			get_document()->container()->GetImageSize(url.c_str(), list_image_baseurl, sz);
 			if (min_height < sz.height)
 				min_height = sz.height;
 		}
@@ -3216,11 +3216,11 @@ void html_tag::draw_children_box(uint_ptr hdc, int x, int y, const position *cli
 		border_radiuses bdr_radius = _css_borders.radius.calc_percents(border_box.width, border_box.height);
 		bdr_radius -= _borders;
 		bdr_radius -= _padding;
-		doc->container()->set_clip(pos, bdr_radius, true, true);
+		doc->container()->SetClip(pos, bdr_radius, true, true);
 	}
 
 	position browser_wnd;
-	doc->container()->get_client_rect(browser_wnd);
+	doc->container()->GetClientRect(browser_wnd);
 
 	element::ptr el;
 	for (auto &item : _children) {
@@ -3278,7 +3278,7 @@ void html_tag::draw_children_box(uint_ptr hdc, int x, int y, const position *cli
 	}
 
 	if (_overflow > overflow_visible)
-		doc->container()->del_clip();
+		doc->container()->DelClip();
 }
 
 void html_tag::draw_children_table(uint_ptr hdc, int x, int y, const position *clip, draw_flag flag, int zindex)

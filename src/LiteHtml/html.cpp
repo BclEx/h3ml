@@ -3,7 +3,7 @@
 #include "html_tag.h"
 using namespace litehtml;
 
-void litehtml::trim(tstring &s) 
+void litehtml::trim(tstring &s)
 {
 	tstring::size_type pos = s.find_first_not_of(_t(" \n\r\t"));
 	if (pos != tstring::npos)
@@ -13,9 +13,9 @@ void litehtml::trim(tstring &s)
 		s.erase(s.begin() + pos + 1, s.end());
 }
 
-void litehtml::lcase(tstring &s) 
+void litehtml::lcase(tstring &s)
 {
-	for(tstring::iterator i = s.begin(); i != s.end(); i++)
+	for (tstring::iterator i = s.begin(); i != s.end(); i++)
 		(*i) = t_tolower(*i);
 }
 
@@ -41,7 +41,7 @@ int litehtml::value_index(const tstring &val, const tstring &strings, int defVal
 
 	int idx = 0;
 	tstring::size_type deli_start = 0;
-	tstring::size_type deli_end	= strings.find(delim, deli_start);
+	tstring::size_type deli_end = strings.find(delim, deli_start);
 	tstring::size_type ite_len = 0;
 	while (true) {
 		ite_len = (deli_end == tstring::npos ? strings.length() - deli_start : deli_end - deli_start);
@@ -89,9 +89,9 @@ void litehtml::split_string(const tstring &str, string_vector &tokens, const tst
 		token_len = (token_end == tstring::npos ? tstring::npos : token_end - token_start);
 		token = str.substr(token_start, token_len);
 		if (!token.empty())
-			tokens.push_back( token );
+			tokens.push_back(token);
 		if (token_end != tstring::npos && !delims_preserve.empty() && delims_preserve.find_first_of(str[token_end]) != tstring::npos)
-			tokens.push_back( str.substr(token_end, 1) );
+			tokens.push_back(str.substr(token_end, 1));
 		token_start = token_end;
 		if (token_start == tstring::npos) break;
 		token_start++;
@@ -103,7 +103,7 @@ void litehtml::split_string(const tstring &str, string_vector &tokens, const tst
 void litehtml::join_string(tstring &str, const string_vector &tokens, const tstring &delims)
 {
 	tstringstream ss;
-	for (size_t i=0; i<tokens.size(); ++i) {
+	for (size_t i = 0; i < tokens.size(); ++i) {
 		if (i != 0)
 			ss << delims;
 		ss << tokens[i];

@@ -391,10 +391,10 @@ namespace litehtml
 #define text_transfor_strings _t("none;capitalize;uppercase;lowercase")
 	enum text_transform
 	{
-		text_transfor_none,
-		text_transfor_capitalize,
-		text_transfor_uppercase,
-		text_transfor_lowercase
+		text_transform_none,
+		text_transform_capitalize,
+		text_transform_uppercase,
+		text_transform_lowercase
 	};
 
 #define white_space_strings _t("normal;nowrap;pre;pre-line;pre-wrap")

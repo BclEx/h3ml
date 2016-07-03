@@ -1,4 +1,4 @@
-#include "Dib.h"
+#include <Dib.h>
 
 Dib::Dib()
 {

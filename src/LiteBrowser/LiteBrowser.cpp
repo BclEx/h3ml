@@ -8,19 +8,19 @@
 
 using namespace Gdiplus;
 
-CRITICAL_SECTION cairo_font::m_sync;
+CRITICAL_SECTION cairo_font::_sync;
 
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
 	CoInitialize(NULL);
 	InitCommonControls();
-	InitializeCriticalSectionAndSpinCount(&cairo_font::m_sync, 1000);
+	InitializeCriticalSectionAndSpinCount(&cairo_font::_sync, 1000);
 
 	GdiplusStartupInput gdiplusStartupInput;
 	ULONG_PTR gdiplusToken;
 	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 	{
-		CBrowserWnd wnd(hInstance);
+		BrowserWnd wnd(hInstance);
 		wnd.Create();
 		if (lpCmdLine && lpCmdLine[0])
 			wnd.Open(lpCmdLine);

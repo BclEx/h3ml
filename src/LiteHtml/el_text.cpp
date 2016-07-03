@@ -7,7 +7,7 @@ el_text::el_text(const tchar_t *text, const std::shared_ptr<document> &doc) : el
 {
 	if (text)
 		_text = text;
-	_text_transform	= text_transfor_none;
+	_text_transform	= text_transform_none;
 	_use_transformed = false;
 	_draw_spaces = true;
 }
@@ -35,11 +35,11 @@ const tchar_t *el_text::get_style_property(const tchar_t *name, bool inherited, 
 
 void el_text::parse_styles(bool is_reparse)
 {
-	_text_transform	= (text_transform)value_index(get_style_property(_t("text-transform"), true, _t("none")), text_transfor_strings, text_transfor_none);
-	if (_text_transform != text_transfor_none) {
+	_text_transform	= (text_transform)value_index(get_style_property(_t("text-transform"), true, _t("none")), text_transfor_strings, text_transform_none);
+	if (_text_transform != text_transform_none) {
 		_transformed_text = _text;
 		_use_transformed = true;
-		get_document()->container()->transfor_text(_transformed_text, _text_transform);
+		get_document()->container()->TransformText(_transformed_text, _text_transform);
 	}
 
 	if (is_white_space()) {
@@ -68,7 +68,7 @@ void el_text::parse_styles(bool is_reparse)
 	}
 	else {
 		_size.height = fm.height;
-		_size.width	= get_document()->container()->text_width(_use_transformed ? _transformed_text.c_str() : _text.c_str(), font);
+		_size.width	= get_document()->container()->TextWidth(_use_transformed ? _transformed_text.c_str() : _text.c_str(), font);
 	}
 	_draw_spaces = fm.draw_spaces;
 }
@@ -92,7 +92,7 @@ void el_text::draw(uint_ptr hdc, int x, int y, const position *clip)
 			document::ptr doc = get_document();
 			uint_ptr font = el_parent->get_font();
 			web_color color = el_parent->get_color(_t("color"), true, doc->get_def_color());
-			doc->container()->draw_text(hdc, _use_transformed ? _transformed_text.c_str() : _text.c_str(), font, color, pos);
+			doc->container()->DrawText(hdc, _use_transformed ? _transformed_text.c_str() : _text.c_str(), font, color, pos);
 		}
 	}
 }

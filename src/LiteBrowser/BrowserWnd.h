@@ -2,20 +2,21 @@
 
 #define BROWSERWND_CLASS L"BROWSER_WINDOW"
 
-class CHTMLViewWnd;
-class CToolbarWnd;
-class CBrowserWnd
+using namespace litehtml;
+class HtmlViewWnd;
+class ToolbarWnd;
+class BrowserWnd
 {
 	HWND _hWnd;
 	HINSTANCE _hInst;
-	CHTMLViewWnd *_view;
+	HtmlViewWnd *_view;
 #ifndef NO_TOOLBAR
-	CToolbarWnd *_toolbar;
+	ToolbarWnd *_toolbar;
 #endif
-	litehtml::context _browserContext;
+	context _browserContext;
 public:
-	CBrowserWnd(HINSTANCE hInst);
-	virtual ~CBrowserWnd();
+	BrowserWnd(HINSTANCE hInst);
+	virtual ~BrowserWnd();
 
 	void Create();
 	void Open(LPCWSTR path);

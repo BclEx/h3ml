@@ -15,8 +15,8 @@
 #include <litehtml.h>
 #include <winhttp.h>
 #include <algorithm>
-#include "TxDib.h"
-#include "Dib.h"
+#include <TxDib.h>
+#include <Dib.h>
 
 //
 // include CAIRO project

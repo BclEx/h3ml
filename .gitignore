@@ -11,6 +11,8 @@ x64/
 TestResults/
 .metadata/
 *.o
+*.db
+*.opendb
 *.suo
 *.sdf
 *.pdb

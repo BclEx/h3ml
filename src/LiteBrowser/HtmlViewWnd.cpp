@@ -5,7 +5,7 @@
 #include <strsafe.h>
 #include "BrowserWnd.h"
 
-CHTMLViewWnd::CHTMLViewWnd(HINSTANCE hInst, context *ctx, CBrowserWnd *parent)
+HtmlViewWnd::HtmlViewWnd(HINSTANCE hInst, context *ctx, BrowserWnd *parent)
 {
 	_parent = parent;
 	_hInst = hInst;
@@ -22,7 +22,7 @@ CHTMLViewWnd::CHTMLViewWnd(HINSTANCE hInst, context *ctx, CBrowserWnd *parent)
 	if (!GetClassInfo(_hInst, HTMLVIEWWND_CLASS, &wc)) {
 		ZeroMemory(&wc, sizeof(wc));
 		wc.style = CS_HREDRAW | CS_VREDRAW;
-		wc.lpfnWndProc = (WNDPROC)CHTMLViewWnd::WndProc;
+		wc.lpfnWndProc = (WNDPROC)HtmlViewWnd::WndProc;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = _hInst;
@@ -35,16 +35,16 @@ CHTMLViewWnd::CHTMLViewWnd(HINSTANCE hInst, context *ctx, CBrowserWnd *parent)
 	}
 }
 
-CHTMLViewWnd::~CHTMLViewWnd()
+HtmlViewWnd::~HtmlViewWnd()
 {
 	DeleteCriticalSection(&_sync);
 }
 
-LRESULT CALLBACK CHTMLViewWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK HtmlViewWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	CHTMLViewWnd *this_ = NULL;
+	HtmlViewWnd *this_ = NULL;
 	if (IsWindow(hWnd)) {
-		this_ = (CHTMLViewWnd *)GetProp(hWnd, TEXT("htmlview_this"));
+		this_ = (HtmlViewWnd *)GetProp(hWnd, TEXT("htmlview_this"));
 		if (this_ && this_->_hWnd != hWnd)
 			this_ = NULL;
 	}
@@ -67,14 +67,14 @@ LRESULT CALLBACK CHTMLViewWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, 
 			return TRUE;
 		case WM_CREATE: {
 			LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-			this_ = (CHTMLViewWnd *)(lpcs->lpCreateParams);
+			this_ = (HtmlViewWnd *)(lpcs->lpCreateParams);
 			SetProp(hWnd, TEXT("htmlview_this"), (HANDLE)this_);
 			this_->_hWnd = hWnd;
 			this_->OnCreate();
 			break; }
 		case WM_PAINT: {
 			RECT rcClient;
-			GetClientRect(hWnd, &rcClient);
+			::GetClientRect(hWnd, &rcClient);
 			this_->CreateDib(rcClient.right - rcClient.left, rcClient.bottom - rcClient.top);
 			PAINTSTRUCT ps;
 			HDC hdc = BeginPaint(hWnd, &ps);
@@ -132,14 +132,14 @@ LRESULT CALLBACK CHTMLViewWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, 
 	return DefWindowProc(hWnd, uMessage, wParam, lParam);
 }
 
-void CHTMLViewWnd::OnCreate()
+void HtmlViewWnd::OnCreate()
 {
 }
 
-void CHTMLViewWnd::OnPaint(Dib *dib, LPRECT rcDraw)
+void HtmlViewWnd::OnPaint(Dib *dib, LPRECT rcDraw)
 {
 	cairo_surface_t *surface = cairo_image_surface_create_for_data((unsigned char *)dib->Bits(), CAIRO_FORMAT_ARGB32, dib->Width(), dib->Height(), dib->Width() * 4);
-	cairo_t* cr = cairo_create(surface);
+	cairo_t *cr = cairo_create(surface);
 
 	cairo_rectangle(cr, rcDraw->left, rcDraw->top, rcDraw->right - rcDraw->left, rcDraw->bottom - rcDraw->top);
 	cairo_clip(cr);
@@ -160,7 +160,7 @@ void CHTMLViewWnd::OnPaint(Dib *dib, LPRECT rcDraw)
 	cairo_surface_destroy(surface);
 }
 
-void CHTMLViewWnd::OnSize(int width, int height)
+void HtmlViewWnd::OnSize(int width, int height)
 {
 	Lock();
 	WebPage *page = GetPage(false);
@@ -173,16 +173,16 @@ void CHTMLViewWnd::OnSize(int width, int height)
 	Render();
 }
 
-void CHTMLViewWnd::OnDestroy()
+void HtmlViewWnd::OnDestroy()
 {
 }
 
-void CHTMLViewWnd::Create(int x, int y, int width, int height, HWND parent)
+void HtmlViewWnd::Create(int x, int y, int width, int height, HWND parent)
 {
 	_hWnd = CreateWindow(HTMLVIEWWND_CLASS, L"htmlview", WS_CHILD | WS_VISIBLE, x, y, width, height, parent, NULL, _hInst, (LPVOID)this);
 }
 
-void CHTMLViewWnd::Open(LPCWSTR url, bool reload)
+void HtmlViewWnd::Open(LPCWSTR url, bool reload)
 {
 	std::wstring hash;
 	std::wstring s_url = url;
@@ -206,7 +206,7 @@ void CHTMLViewWnd::Open(LPCWSTR url, bool reload)
 			_page_next->Release();
 		}
 		_page_next = new WebPage(this);
-		_page_next->_hash	= hash;
+		_page_next->_hash = hash;
 		_page_next->Load(s_url.c_str());
 	}
 	Unlock();
@@ -219,16 +219,16 @@ void CHTMLViewWnd::Open(LPCWSTR url, bool reload)
 	}
 }
 
-void CHTMLViewWnd::Render(BOOL calcTime, BOOL doRedraw, int calcRepeat)
+void HtmlViewWnd::Render(BOOL calcTime, BOOL doRedraw, int calcRepeat)
 {
 	if (!_hWnd)
 		return;
 	WebPage *page = GetPage();
 	if (page) {
 		RECT rcClient;
-		GetClientRect(_hWnd, &rcClient);
-		int width	= rcClient.right - rcClient.left;
-		int height	= rcClient.bottom - rcClient.top;
+		::GetClientRect(_hWnd, &rcClient);
+		int width = rcClient.right - rcClient.left;
+		int height = rcClient.bottom - rcClient.top;
 
 		if (calcTime) {
 			if (calcRepeat <= 0) calcRepeat = 1;
@@ -256,7 +256,7 @@ void CHTMLViewWnd::Render(BOOL calcTime, BOOL doRedraw, int calcRepeat)
 	}
 }
 
-void CHTMLViewWnd::Redraw(LPRECT rcDraw, BOOL update)
+void HtmlViewWnd::Redraw(LPRECT rcDraw, BOOL update)
 {
 	if (_hWnd) {
 		InvalidateRect(_hWnd, rcDraw, TRUE);
@@ -265,7 +265,7 @@ void CHTMLViewWnd::Redraw(LPRECT rcDraw, BOOL update)
 	}
 }
 
-void CHTMLViewWnd::UpdateScroll()
+void HtmlViewWnd::UpdateScroll()
 {
 	if (!IsValidPage()) {
 		ShowScrollBar(_hWnd, SB_BOTH, FALSE);
@@ -275,7 +275,7 @@ void CHTMLViewWnd::UpdateScroll()
 	if (_max_top > 0) {
 		ShowScrollBar(_hWnd, SB_VERT, TRUE);
 		RECT rcClient;
-		GetClientRect(_hWnd, &rcClient);
+		::GetClientRect(_hWnd, &rcClient);
 		SCROLLINFO si;
 		si.cbSize = sizeof(SCROLLINFO);
 		si.fMask = SIF_ALL;
@@ -291,7 +291,7 @@ void CHTMLViewWnd::UpdateScroll()
 	if (_max_left > 0) {
 		ShowScrollBar(_hWnd, SB_HORZ, TRUE);
 		RECT rcClient;
-		GetClientRect(_hWnd, &rcClient);
+		::GetClientRect(_hWnd, &rcClient);
 		SCROLLINFO si;
 		si.cbSize = sizeof(SCROLLINFO);
 		si.fMask = SIF_ALL;
@@ -305,10 +305,10 @@ void CHTMLViewWnd::UpdateScroll()
 		ShowScrollBar(_hWnd, SB_HORZ, FALSE);
 }
 
-void CHTMLViewWnd::OnVScroll(int pos, int flags)
+void HtmlViewWnd::OnVScroll(int pos, int flags)
 {
 	RECT rcClient;
-	GetClientRect(_hWnd, &rcClient);
+	::GetClientRect(_hWnd, &rcClient);
 	int lineHeight = 16;
 	int pageHeight = rcClient.bottom - rcClient.top - lineHeight;
 	int newTop = _top;
@@ -345,10 +345,10 @@ void CHTMLViewWnd::OnVScroll(int pos, int flags)
 	ScrollTo(_left, newTop);
 }
 
-void CHTMLViewWnd::OnHScroll(int pos, int flags)
+void HtmlViewWnd::OnHScroll(int pos, int flags)
 {
 	RECT rcClient;
-	GetClientRect(_hWnd, &rcClient);
+	::GetClientRect(_hWnd, &rcClient);
 
 	int lineWidth = 16;
 	int pageWidth = rcClient.right - rcClient.left - lineWidth;
@@ -376,7 +376,7 @@ void CHTMLViewWnd::OnHScroll(int pos, int flags)
 		break;
 	case SB_THUMBPOSITION:
 	case SB_THUMBTRACK:
-		newLeft  = pos;
+		newLeft = pos;
 		if (newLeft < 0)
 			newLeft = 0;
 		if (newLeft > _max_left)
@@ -386,7 +386,7 @@ void CHTMLViewWnd::OnHScroll(int pos, int flags)
 	ScrollTo(newLeft, _top);
 }
 
-void CHTMLViewWnd::OnMouseWheel(int delta)
+void HtmlViewWnd::OnMouseWheel(int delta)
 {
 	int lineHeight = 16;
 	int newTop = _top - delta / WHEEL_DELTA * lineHeight * 3;
@@ -398,40 +398,22 @@ void CHTMLViewWnd::OnMouseWheel(int delta)
 		ScrollTo(_left, newTop);
 }
 
-void CHTMLViewWnd::OnKeyDown(UINT vKey)
+void HtmlViewWnd::OnKeyDown(UINT vKey)
 {
 	switch (vKey) {
-	case VK_F5:
-		Refresh();
-		break;
-	case VK_NEXT:
-		OnVScroll(0, SB_PAGEDOWN);
-		break;
-	case VK_PRIOR:
-		OnVScroll(0, SB_PAGEUP);
-		break;
-	case VK_DOWN:
-		OnVScroll(0, SB_LINEDOWN);
-		break;
-	case VK_UP:
-		OnVScroll(0, SB_LINEUP);
-		break;
-	case VK_HOME:
-		ScrollTo(_left, 0);
-		break;
-	case VK_END:
-		ScrollTo(_left, _max_top);
-		break;
-	case VK_LEFT:
-		OnHScroll(0, SB_LINELEFT);
-		break;
-	case VK_RIGHT:
-		OnHScroll(0, SB_LINERIGHT);
-		break;
+	case VK_F5: Refresh(); break;
+	case VK_NEXT: OnVScroll(0, SB_PAGEDOWN); break;
+	case VK_PRIOR: OnVScroll(0, SB_PAGEUP); break;
+	case VK_DOWN: OnVScroll(0, SB_LINEDOWN); break;
+	case VK_UP: OnVScroll(0, SB_LINEUP); break;
+	case VK_HOME: ScrollTo(_left, 0); break;
+	case VK_END: ScrollTo(_left, _max_top); break;
+	case VK_LEFT: OnHScroll(0, SB_LINELEFT); break;
+	case VK_RIGHT: OnHScroll(0, SB_LINERIGHT); break;
 	}
 }
 
-void CHTMLViewWnd::Refresh()
+void HtmlViewWnd::Refresh()
 {
 	WebPage *page = GetPage();
 	if (page) {
@@ -440,7 +422,7 @@ void CHTMLViewWnd::Refresh()
 	}
 }
 
-void CHTMLViewWnd::SetCaption()
+void HtmlViewWnd::SetCaption()
 {
 	WebPage *page = GetPage();
 	if (!page)
@@ -451,7 +433,7 @@ void CHTMLViewWnd::SetCaption()
 	}
 }
 
-void CHTMLViewWnd::OnMouseMove(int x, int y)
+void HtmlViewWnd::OnMouseMove(int x, int y)
 {
 	WebPage *page = GetPage();
 	if (page) {
@@ -464,7 +446,7 @@ void CHTMLViewWnd::OnMouseMove(int x, int y)
 				rcRedraw.left = box->left();
 				rcRedraw.right = box->right();
 				rcRedraw.top = box->top();
-				rcRedraw.bottom	= box->bottom();
+				rcRedraw.bottom = box->bottom();
 				Redraw(&rcRedraw, FALSE);
 			}
 			UpdateWindow(_hWnd);
@@ -474,7 +456,7 @@ void CHTMLViewWnd::OnMouseMove(int x, int y)
 	}
 }
 
-void CHTMLViewWnd::OnMouseLeave()
+void HtmlViewWnd::OnMouseLeave()
 {
 	WebPage *page = GetPage();
 	if (page) {
@@ -487,7 +469,7 @@ void CHTMLViewWnd::OnMouseLeave()
 				rcRedraw.left = box->left();
 				rcRedraw.right = box->right();
 				rcRedraw.top = box->top();
-				rcRedraw.bottom	= box->bottom();
+				rcRedraw.bottom = box->bottom();
 				Redraw(&rcRedraw, FALSE);
 			}
 			UpdateWindow(_hWnd);
@@ -496,7 +478,7 @@ void CHTMLViewWnd::OnMouseLeave()
 	}
 }
 
-void CHTMLViewWnd::OnLButtonDown(int x, int y)
+void HtmlViewWnd::OnLButtonDown(int x, int y)
 {
 	WebPage *page = GetPage();
 	if (page) {
@@ -509,7 +491,7 @@ void CHTMLViewWnd::OnLButtonDown(int x, int y)
 				rcRedraw.left = box->left();
 				rcRedraw.right = box->right();
 				rcRedraw.top = box->top();
-				rcRedraw.bottom	= box->bottom();
+				rcRedraw.bottom = box->bottom();
 				Redraw(&rcRedraw, FALSE);
 			}
 			UpdateWindow(_hWnd);
@@ -518,21 +500,20 @@ void CHTMLViewWnd::OnLButtonDown(int x, int y)
 	}
 }
 
-void CHTMLViewWnd::OnLButtonUp(int x, int y)
+void HtmlViewWnd::OnLButtonUp(int x, int y)
 {
 	WebPage *page = GetPage();
 	if (page) {
 		position::vector redrawBoxes;
 		if (page->_doc->on_lbutton_up(x + _left, y + _top, x, y, redrawBoxes)) {
-			for (position::vector::iterator box = redrawBoxes.begin(); box != redrawBoxes.end(); box++)
-			{
+			for (position::vector::iterator box = redrawBoxes.begin(); box != redrawBoxes.end(); box++) {
 				box->x -= _left;
 				box->y -= _top;
 				RECT rcRedraw;
 				rcRedraw.left = box->left();
 				rcRedraw.right = box->right();
 				rcRedraw.top = box->top();
-				rcRedraw.bottom	= box->bottom();
+				rcRedraw.bottom = box->bottom();
 				Redraw(&rcRedraw, FALSE);
 			}
 			UpdateWindow(_hWnd);
@@ -541,21 +522,21 @@ void CHTMLViewWnd::OnLButtonUp(int x, int y)
 	}
 }
 
-void CHTMLViewWnd::Back()
+void HtmlViewWnd::Back()
 {
 	std::wstring url;
 	if (_history.Back(url))
 		Open(url.c_str(), false);
 }
 
-void CHTMLViewWnd::Forward()
+void HtmlViewWnd::Forward()
 {
 	std::wstring url;
 	if (_history.Forward(url))
 		Open(url.c_str(), false);
 }
 
-void CHTMLViewWnd::UpdateCursor()
+void HtmlViewWnd::UpdateCursor()
 {
 	LPCWSTR defArrow = (_page_next ? IDC_APPSTARTING : IDC_ARROW);
 	WebPage *page = GetPage();
@@ -570,17 +551,17 @@ void CHTMLViewWnd::UpdateCursor()
 	}
 }
 
-void CHTMLViewWnd::GetClientRect(position &client) const
+void HtmlViewWnd::GetClientRect(position &client) const
 {
 	RECT rcClient;
-	GetClientRect(_hWnd, &rcClient);
+	::GetClientRect(_hWnd, &rcClient);
 	client.x = rcClient.left;
 	client.y = rcClient.top;
 	client.width = rcClient.right - rcClient.left;
 	client.height = rcClient.bottom - rcClient.top;
 }
 
-bool CHTMLViewWnd::IsValidPage(bool withLock)
+bool HtmlViewWnd::IsValidPage(bool withLock)
 {
 	bool ret_val = true;
 	if (withLock)
@@ -592,7 +573,7 @@ bool CHTMLViewWnd::IsValidPage(bool withLock)
 	return ret_val;
 }
 
-WebPage *CHTMLViewWnd::GetPage(bool withLock)
+WebPage *HtmlViewWnd::GetPage(bool withLock)
 {
 	WebPage *ret_val = NULL;
 	if (withLock)
@@ -606,7 +587,7 @@ WebPage *CHTMLViewWnd::GetPage(bool withLock)
 	return ret_val;
 }
 
-void CHTMLViewWnd::OnPageReady()
+void HtmlViewWnd::OnPageReady()
 {
 	std::wstring url;
 	Lock();
@@ -640,7 +621,7 @@ void CHTMLViewWnd::OnPageReady()
 	}
 }
 
-void CHTMLViewWnd::ShowHash(std::wstring &hash)
+void HtmlViewWnd::ShowHash(std::wstring &hash)
 {
 	WebPage *page = GetPage();
 	if (page) {
@@ -649,7 +630,7 @@ void CHTMLViewWnd::ShowHash(std::wstring &hash)
 #ifndef LITEHTML_UTF8
 			StringCchPrintf(selector, 255, L"#%s", hash.c_str());
 #else
-			LPSTR hashA = cairo_font::wchar_to_utf8(hash.c_str());
+			LPSTR hashA = cairo_font::WcharToUtf8(hash.c_str());
 			StringCchPrintfA(selector, 255, "#%s", hashA);
 #endif
 			element::ptr el = page->_doc->root()->select_one(selector);
@@ -677,7 +658,7 @@ void CHTMLViewWnd::ShowHash(std::wstring &hash)
 	}
 }
 
-void CHTMLViewWnd::UpdateHistory()
+void HtmlViewWnd::UpdateHistory()
 {
 	WebPage *page = GetPage();
 	if (page) {
@@ -688,7 +669,7 @@ void CHTMLViewWnd::UpdateHistory()
 	}
 }
 
-void CHTMLViewWnd::CreateDib(int width, int height)
+void HtmlViewWnd::CreateDib(int width, int height)
 {
 	if (_dib.Width() < width || _dib.Height() < height) {
 		_dib.Destroy();
@@ -696,14 +677,14 @@ void CHTMLViewWnd::CreateDib(int width, int height)
 	}
 }
 
-void CHTMLViewWnd::ScrollTo(int newLeft, int newTop)
+void HtmlViewWnd::ScrollTo(int newLeft, int newTop)
 {
 	position client;
 	GetClientRect(client);
 
 	bool needRedraw = false;
 	if (newTop != _top) {
-		if (std::abs(newTop - _top) < client.height - client.height / 4 ) {
+		if (std::abs(newTop - _top) < client.height - client.height / 4) {
 			RECT rcRedraw;
 			if (newTop > _top) {
 				int linesCount = newTop - _top;
@@ -713,7 +694,7 @@ void CHTMLViewWnd::ScrollTo(int newLeft, int newTop)
 				rcRedraw.left = client.left();
 				rcRedraw.right = client.right();
 				rcRedraw.top = client.height - linesCount;
-				rcRedraw.bottom	= client.height;
+				rcRedraw.bottom = client.height;
 			}
 			else {
 				int linesCount = _top - newTop;
@@ -723,7 +704,7 @@ void CHTMLViewWnd::ScrollTo(int newLeft, int newTop)
 				rcRedraw.left = client.left();
 				rcRedraw.right = client.right();
 				rcRedraw.top = client.top();
-				rcRedraw.bottom	= linesCount;
+				rcRedraw.bottom = linesCount;
 			}
 
 			int oldTop = _top;
@@ -745,18 +726,18 @@ void CHTMLViewWnd::ScrollTo(int newLeft, int newTop)
 				rcClient.left = client.left();
 				rcClient.right = client.right();
 				rcClient.top = client.top();
-				rcClient.bottom	= client.bottom();
+				rcClient.bottom = client.bottom();
 				for (position::vector::iterator iter = fixedBoxes.begin(); iter != fixedBoxes.end(); iter++) {
 					rcRedraw.left = iter->left();
 					rcRedraw.right = iter->right();
 					rcRedraw.top = iter->top();
-					rcRedraw.bottom	= iter->bottom();
+					rcRedraw.bottom = iter->bottom();
 					if (IntersectRect(&rcFixed, &rcRedraw, &rcClient))
 						OnPaint(&_dib, &rcFixed);
 					rcRedraw.left = iter->left();
 					rcRedraw.right = iter->right();
 					rcRedraw.top = iter->top() + (oldTop - _top);
-					rcRedraw.bottom	= iter->bottom() + (oldTop - _top);
+					rcRedraw.bottom = iter->bottom() + (oldTop - _top);
 					if (IntersectRect(&rcFixed, &rcRedraw, &rcClient))
 						OnPaint(&_dib, &rcFixed);
 				}
@@ -776,7 +757,7 @@ void CHTMLViewWnd::ScrollTo(int newLeft, int newTop)
 		SetScrollPos(_hWnd, SB_VERT, _top, TRUE);
 	}
 	if (newLeft != _left) {
-		_left  = newLeft;
+		_left = newLeft;
 		SetScrollPos(_hWnd, SB_HORZ, _left, TRUE);
 		needRedraw = true;
 	}

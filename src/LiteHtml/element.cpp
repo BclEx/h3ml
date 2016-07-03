@@ -73,7 +73,7 @@ bool element::get_predefined_height(int &p_height) const
 		element::ptr el_parent = parent();
 		if (!el_parent) {
 			position client_pos;
-			get_document()->container()->get_client_rect(client_pos);
+			get_document()->container()->GetClientRect(client_pos);
 			p_height = h.calc_percent(client_pos.height);
 			return true;
 		}
@@ -126,7 +126,7 @@ int element::calc_width(int defVal) const
 		element::ptr el_parent = parent();
 		if (!el_parent) {
 			position client_pos;
-			get_document()->container()->get_client_rect(client_pos);
+			get_document()->container()->GetClientRect(client_pos);
 			return w.calc_percent(client_pos.width);
 		}
 		else {

@@ -11,7 +11,7 @@ el_image::~el_image() { }
 
 void el_image::get_content_size(size &sz, int max_width)
 {
-	get_document()->container()->get_image_size(_src.c_str(), 0, sz);
+	get_document()->container()->GetImageSize(_src.c_str(), 0, sz);
 }
 
 int el_image::line_height() const
@@ -31,7 +31,7 @@ int el_image::render(int x, int y, int max_width, bool second_pass)
 	_pos.move_to(x, y);
 	document::ptr doc = get_document();
 	size sz;
-	doc->container()->get_image_size(_src.c_str(), 0, sz);
+	doc->container()->GetImageSize(_src.c_str(), 0, sz);
 	_pos.width = sz.width;
 	_pos.height	= sz.height;
 
@@ -130,7 +130,7 @@ void el_image::draw(uint_ptr hdc, int x, int y, const position *clip)
 		if (bg) {
 			background_paint bg_paint;
 			init_background_paint(pos, bg_paint, bg);
-			get_document()->container()->draw_background(hdc, bg_paint);
+			get_document()->container()->DrawBackground(hdc, bg_paint);
 		}
 	}
 
@@ -149,7 +149,7 @@ void el_image::draw(uint_ptr hdc, int x, int y, const position *clip)
 		bg.border_radius = _css_borders.radius.calc_percents(bg.border_box.width, bg.border_box.height);
 		bg.position_x = pos.x;
 		bg.position_y = pos.y;
-		get_document()->container()->draw_background(hdc, bg);
+		get_document()->container()->DrawBackground(hdc, bg);
 	}
 
 	// draw borders
@@ -159,7 +159,7 @@ void el_image::draw(uint_ptr hdc, int x, int y, const position *clip)
 		border_box += _borders;
 		borders bdr = _css_borders;
 		bdr.radius = _css_borders.radius.calc_percents(border_box.width, border_box.height);
-		get_document()->container()->draw_borders(hdc, bdr, border_box, have_parent() ? false : true);
+		get_document()->container()->DrawBorders(hdc, bdr, border_box, have_parent() ? false : true);
 	}
 }
 
@@ -168,8 +168,8 @@ void el_image::parse_styles(bool is_reparse /*= false*/)
 	html_tag::parse_styles(is_reparse);
 	if (!_src.empty()) {
 		if (!_css_height.is_predefined() && !_css_width.is_predefined())
-			get_document()->container()->load_image(_src.c_str(), 0, true);
+			get_document()->container()->LoadImage(_src.c_str(), 0, true);
 		else
-			get_document()->container()->load_image(_src.c_str(), 0, false);
+			get_document()->container()->LoadImage(_src.c_str(), 0, false);
 	}
 }

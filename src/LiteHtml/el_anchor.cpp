@@ -10,7 +10,7 @@ void el_anchor::on_click()
 {
 	const tchar_t *href = get_attr(_t("href"));
 	if (href)
-		get_document()->container()->on_anchor_click(href, shared_from_this());
+		get_document()->container()->OnAnchorClick(href, shared_from_this());
 }
 
 void el_anchor::apply_stylesheet(const css &stylesheet)

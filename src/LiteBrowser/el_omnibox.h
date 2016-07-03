@@ -3,23 +3,21 @@
 
 #define WM_OMNIBOX_CLICKED	(WM_USER + 10002)
 
-class el_omnibox : public litehtml::html_tag
+using namespace litehtml;
+class el_omnibox : public html_tag
 {
-	CSingleLineEditCtrl m_edit;
-	HWND m_hWndParent;
-	BOOL m_haveFocus;
+	SingleLineEditCtrl _edit;
+	HWND _hWndParent;
+	BOOL _haveFocus;
 public:
-	el_omnibox(const std::shared_ptr<litehtml::document>& doc, HWND parent, cairo_container* container);
+	el_omnibox(const std::shared_ptr<document> &doc, HWND parent, cairo_container *container);
 	~el_omnibox();
 
-	virtual void draw(litehtml::uint_ptr hdc, int x, int y, const litehtml::position* clip);
+	virtual void draw(uint_ptr hdc, int x, int y, const position *clip);
 	virtual void parse_styles(bool is_reparse);
 	virtual void on_click();
 
-	BOOL have_focus()
-	{
-		return m_haveFocus;
-	}
+	BOOL have_focus() { return _haveFocus; }
 	void update_position();
 	void set_url(LPCWSTR url);
 	std::wstring get_url();
@@ -28,19 +26,19 @@ public:
 	void KillFocus();
 	void select_all()
 	{
-		m_edit.setSelection(0, -1);
+		_edit.setSelection(0, -1);
 	}
 	BOOL OnKeyDown(WPARAM wParam, LPARAM lParam)
 	{
-		return m_edit.OnKeyDown(wParam, lParam);
+		return _edit.OnKeyDown(wParam, lParam);
 	}
 	BOOL OnKeyUp(WPARAM wParam, LPARAM lParam)
 	{
-		return m_edit.OnKeyUp(wParam, lParam);
+		return _edit.OnKeyUp(wParam, lParam);
 	}
 	BOOL OnChar(WPARAM wParam, LPARAM lParam)
 	{
-		return m_edit.OnChar(wParam, lParam);
+		return _edit.OnChar(wParam, lParam);
 	}
 	BOOL OnLButtonDown(int x, int y);
 	BOOL OnLButtonUp(int x, int y);

@@ -1,10 +1,10 @@
 #include <Windows.h>
-#include "TxDIB.h"
+#include <TxDib.h>
 #include <emmintrin.h>
 #include <mmintrin.h>
 #include "..\..\lib\freeimage\FreeImage.h"
 
-CTxDib::CTxDib()
+TxDib::TxDib()
 {
 	_maxAlpha = 255;
 	_bits = NULL;
@@ -12,30 +12,30 @@ CTxDib::CTxDib()
 	_height = 0;
 }
 
-CTxDib::CTxDib(CTxDib &val)
+TxDib::TxDib(TxDib &val)
 {
 	_bits = NULL;
 	_width = 0;
-	_height	= 0;
+	_height = 0;
 	_maxAlpha = 255;
 	_copy(val);
 }
 
-CTxDib::CTxDib(LPCWSTR fileName)
+TxDib::TxDib(LPCWSTR fileName)
 {
 	_bits = NULL;
 	_width = 0;
-	_height	= 0;
+	_height = 0;
 	_maxAlpha = 255;
 	Load(fileName);
 }
 
-CTxDib::~CTxDib()
+TxDib::~TxDib()
 {
 	Destroy();
 }
 
-BOOL CTxDib::Load(LPCWSTR fileName)
+BOOL TxDib::Load(LPCWSTR fileName)
 {
 	BOOL ret = FALSE;
 	FREE_IMAGE_FORMAT fif = FreeImage_GetFileTypeU(fileName);
@@ -46,19 +46,19 @@ BOOL CTxDib::Load(LPCWSTR fileName)
 	return ret;
 }
 
-BOOL CTxDib::Load(HRSRC hRes, HMODULE hModule /*= NULL*/)
+BOOL TxDib::Load(HRSRC hRes, HMODULE hModule /*= NULL*/)
 {
 	BOOL ret = FALSE;
-	DWORD rsize	= SizeofResource(hModule, hRes);
+	DWORD rsize = SizeofResource(hModule, hRes);
 	HGLOBAL hMem = LoadResource(hModule, hRes);
 	if (hMem) {
-		LPBYTE lpData = (LPBYTE) LockResource(hMem);
+		LPBYTE lpData = (LPBYTE)LockResource(hMem);
 		ret = Load(lpData, rsize);
 	}
 	return ret;
 }
 
-BOOL CTxDib::Load(LPBYTE data, DWORD size)
+BOOL TxDib::Load(LPBYTE data, DWORD size)
 {
 	BOOL ret = FALSE;
 	FIMEMORY *mem = FreeImage_OpenMemory(data, size);
@@ -73,7 +73,7 @@ BOOL CTxDib::Load(LPBYTE data, DWORD size)
 	return ret;
 }
 
-BOOL CTxDib::Destroy()
+BOOL TxDib::Destroy()
 {
 	if (_bits) {
 		free(_bits);
@@ -84,12 +84,12 @@ BOOL CTxDib::Destroy()
 	return TRUE;
 }
 
-BOOL CTxDib::Draw(HDC hdc, int x, int y, int cx /*= -1*/, long cy /*= -1*/)
+BOOL TxDib::Draw(HDC hdc, int x, int y, int cx /*= -1*/, long cy /*= -1*/)
 {
 	if (!_bits || !cx || !cy)
 		return FALSE;
 	if (cx > 0 && cx != _width || cy > 0 && cy != _height) {
-		CTxDib newdib;
+		TxDib newdib;
 		Resample(cx, cy, &newdib);
 		return newdib.Draw(hdc, x, y);
 	}
@@ -108,7 +108,7 @@ BOOL CTxDib::Draw(HDC hdc, int x, int y, int cx /*= -1*/, long cy /*= -1*/)
 	return TRUE;
 }
 
-void CTxDib::SetTransColor(COLORREF clr)
+void TxDib::SetTransColor(COLORREF clr)
 {
 	RGBQUAD rgb;
 	rgb.rgbRed = GetBValue(clr);
@@ -124,7 +124,7 @@ void CTxDib::SetTransColor(COLORREF clr)
 	}
 }
 
-void CTxDib::Resample(int newWidth, int newHeight, CTxDib *dst)
+void TxDib::Resample(int newWidth, int newHeight, TxDib *dst)
 {
 	if (newHeight <= 0 || newWidth <= 0 || !IsValid())
 		return;
@@ -134,14 +134,14 @@ void CTxDib::Resample(int newWidth, int newHeight, CTxDib *dst)
 		Resample2(newWidth, newHeight, dst);
 }
 
-RGBQUAD CTxDib::GetPixelColorInterpolated(float x, float y)
+RGBQUAD TxDib::GetPixelColorInterpolated(float x, float y)
 {
 	float sX, sY;         //source location
 	WORD wt1, wt2, wd, wb, wc, wa;
 	WORD wrr, wgg, wbb, waa;
 	int xi, yi;
 	float t1, t2, d, b, c, a;
-	RGBQUAD rgb11,rgb21,rgb12,rgb22;
+	RGBQUAD rgb11, rgb21, rgb12, rgb22;
 	RGBQUAD color;
 	LPRGBQUAD pxptr;
 
@@ -152,67 +152,67 @@ RGBQUAD CTxDib::GetPixelColorInterpolated(float x, float y)
 	if (xi < -1 || xi >= _width || yi < -1 || yi >= _height) {
 		// recalculate coordinates and use faster method later on
 		OverflowCoordinates(sX, sY);
-		xi = (int)sX; if (sX<0) xi--; // sX and/or sY have changed ... recalculate xi and yi
-		yi = (int)sY; if (sY<0) yi--;
+		xi = (int)sX; if (sX < 0) xi--; // sX and/or sY have changed ... recalculate xi and yi
+		yi = (int)sY; if (sY < 0) yi--;
 		wt2 = (WORD)((sY - yi) * 256.0f);
 	}
 	// get four neighbouring pixels
 	if ((xi + 1) < _width && xi >= 0 && (yi + 1) < _height && yi >= 0) {
 		// all pixels are inside RGB24 image... optimize reading (and use fixed point arithmetic)
 		wt1 = (WORD)((sX - xi) * 256.0f);
-		wd  = wt1 * wt2 >> 8;
-		wb  = wt1 - wd;
-		wc  = wt2 - wd;
-		wa  = 256 - wt1 - wc;
+		wd = wt1 * wt2 >> 8;
+		wb = wt1 - wd;
+		wc = wt2 - wd;
+		wa = 256 - wt1 - wc;
 
 		pxptr = _bits + yi * _width + xi;
-		wbb = wa * pxptr->rgbBlue; 
-		wgg = wa * pxptr->rgbGreen; 
+		wbb = wa * pxptr->rgbBlue;
+		wgg = wa * pxptr->rgbGreen;
 		wrr = wa * pxptr->rgbRed;
 		waa = wa * pxptr->rgbReserved;
 		pxptr++;
-		wbb += wb * pxptr->rgbBlue; 
-		wgg += wb * pxptr->rgbGreen; 
+		wbb += wb * pxptr->rgbBlue;
+		wgg += wb * pxptr->rgbGreen;
 		wrr += wb * pxptr->rgbRed;
 		waa += wb * pxptr->rgbReserved;
 		pxptr += _width - 1;
-		wbb += wc * pxptr->rgbBlue; 
-		wgg += wc * pxptr->rgbGreen; 
+		wbb += wc * pxptr->rgbBlue;
+		wgg += wc * pxptr->rgbGreen;
 		wrr += wc * pxptr->rgbRed;
 		waa += wc * pxptr->rgbReserved;
 		pxptr++;
-		wbb += wd * pxptr->rgbBlue; 
-		wgg += wd * pxptr->rgbGreen; 
+		wbb += wd * pxptr->rgbBlue;
+		wgg += wd * pxptr->rgbGreen;
 		wrr += wd * pxptr->rgbRed;
 		waa += wd * pxptr->rgbReserved;
 
-		color.rgbRed = (BYTE) (wrr >> 8); 
-		color.rgbGreen = (BYTE) (wgg >> 8); 
-		color.rgbBlue = (BYTE) (wbb >> 8);
-		color.rgbReserved = (BYTE) (waa >> 8);
+		color.rgbRed = (BYTE)(wrr >> 8);
+		color.rgbGreen = (BYTE)(wgg >> 8);
+		color.rgbBlue = (BYTE)(wbb >> 8);
+		color.rgbReserved = (BYTE)(waa >> 8);
 	}
 	else {
 		// default (slower) way to get pixels (not RGB24 or some pixels out of borders)
 		t1 = sX - xi;
 		t2 = sY - yi;
-		d  = t1 * t2;
-		b  = t1 - d;
-		c  = t2 - d;
-		a  = 1 - t1 - c;
+		d = t1 * t2;
+		b = t1 - d;
+		c = t2 - d;
+		a = 1 - t1 - c;
 		rgb11 = GetPixelColorWithOverflow(xi, yi);
 		rgb21 = GetPixelColorWithOverflow(xi + 1, yi);
 		rgb12 = GetPixelColorWithOverflow(xi, yi + 1);
 		rgb22 = GetPixelColorWithOverflow(xi + 1, yi + 1);
 		// calculate linear interpolation
-		color.rgbRed		= (BYTE)(a * rgb11.rgbRed		+ b * rgb21.rgbRed		+ c * rgb12.rgbRed		+ d * rgb22.rgbRed);
-		color.rgbGreen		= (BYTE)(a * rgb11.rgbGreen		+ b * rgb21.rgbGreen	+ c * rgb12.rgbGreen	+ d * rgb22.rgbGreen);
-		color.rgbBlue		= (BYTE)(a * rgb11.rgbBlue		+ b * rgb21.rgbBlue		+ c * rgb12.rgbBlue		+ d * rgb22.rgbBlue);
-		color.rgbReserved	= (BYTE)(a * rgb11.rgbReserved	+ b * rgb21.rgbReserved + c * rgb12.rgbReserved	+ d * rgb22.rgbReserved);
+		color.rgbRed = (BYTE)(a * rgb11.rgbRed + b * rgb21.rgbRed + c * rgb12.rgbRed + d * rgb22.rgbRed);
+		color.rgbGreen = (BYTE)(a * rgb11.rgbGreen + b * rgb21.rgbGreen + c * rgb12.rgbGreen + d * rgb22.rgbGreen);
+		color.rgbBlue = (BYTE)(a * rgb11.rgbBlue + b * rgb21.rgbBlue + c * rgb12.rgbBlue + d * rgb22.rgbBlue);
+		color.rgbReserved = (BYTE)(a * rgb11.rgbReserved + b * rgb21.rgbReserved + c * rgb12.rgbReserved + d * rgb22.rgbReserved);
 	}
 	return color;
 }
 
-void CTxDib::PreMultiplyWithAlpha()
+void TxDib::PreMultiplyWithAlpha()
 {
 	if (!IsValid())
 		return;
@@ -221,13 +221,13 @@ void CTxDib::PreMultiplyWithAlpha()
 		PreMulRGBA(_bits[i]);
 }
 
-void CTxDib::_copy(CTxDib &val)
+void TxDib::_copy(TxDib &val)
 {
 	_copy(val._bits, val._width, val._height, TRUE);
 	_maxAlpha = val._maxAlpha;
 }
 
-void CTxDib::Crop(int left, int top, int right, int bottom, CTxDib *dst /*= NULL*/)
+void TxDib::Crop(int left, int top, int right, int bottom, TxDib *dst /*= NULL*/)
 {
 	if (!IsValid())
 		return;
@@ -244,7 +244,7 @@ void CTxDib::Crop(int left, int top, int right, int bottom, CTxDib *dst /*= NULL
 		return;
 	}
 
-	LPRGBQUAD newBits = (LPRGBQUAD) malloc(newWidth * newHeight * sizeof(RGBQUAD));
+	LPRGBQUAD newBits = (LPRGBQUAD)malloc(newWidth * newHeight * sizeof(RGBQUAD));
 	int startSrc = (_height - bottom) * _width + left;
 	int startDst = 0;
 	for (int i = 0; i < newHeight; i++, startSrc += _width, startDst += newWidth)
@@ -258,7 +258,7 @@ void CTxDib::Crop(int left, int top, int right, int bottom, CTxDib *dst /*= NULL
 		_copy(newBits, newWidth, newHeight);
 }
 
-void CTxDib::_copy(LPRGBQUAD newBits, int newWidth, int newHeight, BOOL copyBits)
+void TxDib::_copy(LPRGBQUAD newBits, int newWidth, int newHeight, BOOL copyBits)
 {
 	Destroy();
 	_width = newWidth;
@@ -268,7 +268,7 @@ void CTxDib::_copy(LPRGBQUAD newBits, int newWidth, int newHeight, BOOL copyBits
 	else {
 		if (newBits) {
 			size_t sz = _width * _height * sizeof(RGBQUAD);
-			_bits = (LPRGBQUAD) malloc(sz);
+			_bits = (LPRGBQUAD)malloc(sz);
 			memcpy(_bits, newBits, sz);
 		}
 		else
@@ -276,7 +276,7 @@ void CTxDib::_copy(LPRGBQUAD newBits, int newWidth, int newHeight, BOOL copyBits
 	}
 }
 
-void CTxDib::Tile(HDC hdc, LPRECT rcDraw, LPRECT rcClip /*= NULL*/)
+void TxDib::Tile(HDC hdc, LPRECT rcDraw, LPRECT rcClip /*= NULL*/)
 {
 	if (!_width || !_height || !_bits)
 		return;
@@ -284,7 +284,7 @@ void CTxDib::Tile(HDC hdc, LPRECT rcDraw, LPRECT rcClip /*= NULL*/)
 	bf.BlendOp = AC_SRC_OVER;
 	bf.BlendFlags = 0;
 	bf.AlphaFormat = AC_SRC_ALPHA;
-	bf.SourceConstantAlpha	= 255;
+	bf.SourceConstantAlpha = 255;
 
 	int x = 0;
 	int y = 0;
@@ -312,13 +312,13 @@ void CTxDib::Tile(HDC hdc, LPRECT rcDraw, LPRECT rcClip /*= NULL*/)
 				drawWidth = _width;
 				drawHeight = _height;
 				if (rcClip) {
-					imgY = rcTemp.top  - rcDst.top;
+					imgY = rcTemp.top - rcDst.top;
 					imgX = rcTemp.left - rcDst.left;
 					drawWidth = rcTemp.right - rcTemp.left;
 					drawHeight = rcTemp.bottom - rcTemp.top;
 					rcDst = rcTemp;
 				}
-				drawWidth -= (rcDst.right - rcDraw->right)  <= 0 ? 0 : (rcDst.right - rcDraw->right);
+				drawWidth -= (rcDst.right - rcDraw->right) <= 0 ? 0 : (rcDst.right - rcDraw->right);
 				drawHeight -= (rcDst.bottom - rcDraw->bottom) <= 0 ? 0 : (rcDst.bottom - rcDraw->bottom);
 				AlphaBlend(hdc, rcDst.left, rcDst.top, drawWidth, drawHeight, memDC, imgX, imgY, drawWidth, drawHeight, bf);
 			}
@@ -329,34 +329,34 @@ void CTxDib::Tile(HDC hdc, LPRECT rcDraw, LPRECT rcClip /*= NULL*/)
 	DeleteDC(memDC);
 }
 
-HBITMAP CTxDib::CreateBitmap(HDC hdc)
+HBITMAP TxDib::CreateBitmap(HDC hdc)
 {
 	HBITMAP bmp = NULL;
-	BITMAPINFO bmp_info = {0}; 
-	bmp_info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER); 
-	bmp_info.bmiHeader.biWidth = _width; 
-	bmp_info.bmiHeader.biHeight = _height; 
-	bmp_info.bmiHeader.biPlanes = 1; 
-	bmp_info.bmiHeader.biBitCount = 32; 
+	BITMAPINFO bmp_info = { 0 };
+	bmp_info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	bmp_info.bmiHeader.biWidth = _width;
+	bmp_info.bmiHeader.biHeight = _height;
+	bmp_info.bmiHeader.biPlanes = 1;
+	bmp_info.bmiHeader.biBitCount = 32;
 
 	HDC dc = hdc;
 	if (!dc)
 		dc = GetDC(NULL);
 
-	void *buf = nullptr; 
-	bmp = ::CreateDIBSection(hdc, &bmp_info, DIB_RGB_COLORS, &buf, 0, 0); 
+	void *buf = nullptr;
+	bmp = ::CreateDIBSection(hdc, &bmp_info, DIB_RGB_COLORS, &buf, 0, 0);
 	memcpy(buf, _bits, _width * _height * sizeof(RGBQUAD));
 	if (!hdc)
 		ReleaseDC(NULL, dc);
 	return bmp;
 }
 
-BOOL CTxDib::CreateFromHBITMAP(HBITMAP bmp)
+BOOL TxDib::CreateFromHBITMAP(HBITMAP bmp)
 {
 	FIBITMAP *dib = NULL;
 	if (bmp) {
 		BITMAP bm;
-		GetObject(bmp, sizeof(BITMAP), (LPSTR) &bm);
+		GetObject(bmp, sizeof(BITMAP), (LPSTR)&bm);
 		dib = FreeImage_Allocate(bm.bmWidth, bm.bmHeight, bm.bmBitsPixel);
 		int colors = FreeImage_GetColorsUsed(dib);
 		HDC dc = GetDC(NULL);
@@ -371,7 +371,7 @@ BOOL CTxDib::CreateFromHBITMAP(HBITMAP bmp)
 	return FALSE;
 }
 
-BOOL CTxDib::Attach(LPVOID pdib)
+BOOL TxDib::Attach(LPVOID pdib)
 {
 	Destroy();
 
@@ -401,16 +401,16 @@ BOOL CTxDib::Attach(LPVOID pdib)
 	return FALSE;
 }
 
-BOOL CTxDib::CreateFromHICON(HICON ico)
+BOOL TxDib::CreateFromHICON(HICON ico)
 {
 	Destroy();
 	BOOL ret = FALSE;
-	if (ico)  { 
+	if (ico) {
 		ICONINFO iinfo;
 		GetIconInfo(ico, &iinfo);
 		if (iinfo.hbmColor) {
 			if (CreateFromHBITMAP(iinfo.hbmColor)) {
-				CTxDib mask;
+				TxDib mask;
 				if (mask.CreateFromHBITMAP(iinfo.hbmMask)) {
 					int cnt = _width * _height;
 					for (int i = 0; i < cnt; i++) {
@@ -430,13 +430,13 @@ BOOL CTxDib::CreateFromHICON(HICON ico)
 		}
 		else if (iinfo.hbmMask) {
 			BITMAP bm;
-			GetObject(iinfo.hbmMask, sizeof(BITMAP), (LPSTR) &bm);
+			GetObject(iinfo.hbmMask, sizeof(BITMAP), (LPSTR)&bm);
 			if (bm.bmWidth * 2 == bm.bmHeight) {
 				_width = bm.bmWidth;
 				_height = bm.bmHeight / 2;
 				_bits = (LPRGBQUAD)malloc(_width * _height * sizeof(RGBQUAD));
 				ZeroMemory(_bits, _width * _height * sizeof(RGBQUAD));
-				CTxDib dib;
+				TxDib dib;
 				dib.CreateFromHBITMAP(iinfo.hbmMask);
 				dib.Crop(0, _width, _width, _height, NULL);
 				int cnt = _width * _height;
@@ -464,7 +464,7 @@ BOOL CTxDib::CreateFromHICON(HICON ico)
 	return ret;
 }
 
-void CTxDib::Colorize(COLORREF clr)
+void TxDib::Colorize(COLORREF clr)
 {
 	if (_bits) {
 		BYTE r = GetRValue(clr);
@@ -473,25 +473,25 @@ void CTxDib::Colorize(COLORREF clr)
 		int cnt = _width * _height;
 		for (int i = 0; i < cnt; i++)
 			if (_bits[i].rgbReserved) {
-				_bits[i].rgbRed	 = r;
-				_bits[i].rgbGreen	 = g;
-				_bits[i].rgbBlue	 = b;
+				_bits[i].rgbRed = r;
+				_bits[i].rgbGreen = g;
+				_bits[i].rgbBlue = b;
 				PreMulRGBA(_bits[i]);
 			}
 	}
 }
 
-RGBQUAD CTxDib::GetAreaColorInterpolated(float const xc, float const yc, float const w, float const h)
+RGBQUAD TxDib::GetAreaColorInterpolated(float const xc, float const yc, float const w, float const h)
 {
 	RGBQUAD color; // calculated colour
 
 	// area is wider and/or taller than one pixel:
-	CTxDibRect2 area(xc-w/2.0f, yc-h/2.0f, xc+w/2.0f, yc+h/2.0f); // area
-	int xi1 = (int)(area.botLeft.x+0.49999999f); // low x
-	int yi1 = (int)(area.botLeft.y+0.49999999f); // low y
+	TxDibRect2 area(xc - w / 2.0f, yc - h / 2.0f, xc + w / 2.0f, yc + h / 2.0f); // area
+	int xi1 = (int)(area.botLeft.x + 0.49999999f); // low x
+	int yi1 = (int)(area.botLeft.y + 0.49999999f); // low y
 
-	int xi2 = (int)(area.topRight.x+0.5f); // top x
-	int yi2 = (int)(area.topRight.y+0.5f); // top y (for loops)
+	int xi2 = (int)(area.topRight.x + 0.5f); // top x
+	int yi2 = (int)(area.topRight.y + 0.5f); // top y (for loops)
 
 	float rr, gg, bb, aa; // red, green, blue and alpha components
 	rr = gg = bb = aa = 0;
@@ -500,46 +500,46 @@ RGBQUAD CTxDib::GetAreaColorInterpolated(float const xc, float const yc, float c
 	float cps; // surface of current crosssection
 	if (h > 1 && w > 1) {
 		// width and height of area are greater than one pixel, so we can employ "ordinary" averaging
-		CTxDibRect2 intBL, intTR; // bottom left and top right intersection
-		intBL = area.CrossSection(CTxDibRect2(((float)xi1)-0.5f, ((float)yi1)-0.5f, ((float)xi1)+0.5f, ((float)yi1)+0.5f));
-		intTR = area.CrossSection(CTxDibRect2(((float)xi2)-0.5f, ((float)yi2)-0.5f, ((float)xi2)+0.5f, ((float)yi2)+0.5f));
+		TxDibRect2 intBL, intTR; // bottom left and top right intersection
+		intBL = area.CrossSection(TxDibRect2(((float)xi1) - 0.5f, ((float)yi1) - 0.5f, ((float)xi1) + 0.5f, ((float)yi1) + 0.5f));
+		intTR = area.CrossSection(TxDibRect2(((float)xi2) - 0.5f, ((float)yi2) - 0.5f, ((float)xi2) + 0.5f, ((float)yi2) + 0.5f));
 		float wBL, wTR, hBL, hTR;
-		wBL=intBL.Width(); // width of bottom left pixel-area intersection
-		hBL=intBL.Height(); // height of bottom left...
-		wTR=intTR.Width(); // width of top right...
-		hTR=intTR.Height(); // height of top right...
+		wBL = intBL.Width(); // width of bottom left pixel-area intersection
+		hBL = intBL.Height(); // height of bottom left...
+		wTR = intTR.Width(); // width of top right...
+		hTR = intTR.Height(); // height of top right...
 
-		AddAveragingCont(GetPixelColorWithOverflow(xi1,yi1), wBL*hBL, rr, gg, bb, aa); // bottom left pixel
-		AddAveragingCont(GetPixelColorWithOverflow(xi2,yi1), wTR*hBL, rr, gg, bb, aa); // bottom right pixel
-		AddAveragingCont(GetPixelColorWithOverflow(xi1,yi2), wBL*hTR, rr, gg, bb, aa); // top left pixel
-		AddAveragingCont(GetPixelColorWithOverflow(xi2,yi2), wTR*hTR, rr, gg, bb, aa); // top right pixel
+		AddAveragingCont(GetPixelColorWithOverflow(xi1, yi1), wBL*hBL, rr, gg, bb, aa); // bottom left pixel
+		AddAveragingCont(GetPixelColorWithOverflow(xi2, yi1), wTR*hBL, rr, gg, bb, aa); // bottom right pixel
+		AddAveragingCont(GetPixelColorWithOverflow(xi1, yi2), wBL*hTR, rr, gg, bb, aa); // top left pixel
+		AddAveragingCont(GetPixelColorWithOverflow(xi2, yi2), wTR*hTR, rr, gg, bb, aa); // top right pixel
 		// bottom and top row
-		for (x = xi1+1; x < xi2; x++) {
-			AddAveragingCont(GetPixelColorWithOverflow(x,yi1), hBL, rr, gg, bb, aa); // bottom row
-			AddAveragingCont(GetPixelColorWithOverflow(x,yi2), hTR, rr, gg, bb, aa); // top row
+		for (x = xi1 + 1; x < xi2; x++) {
+			AddAveragingCont(GetPixelColorWithOverflow(x, yi1), hBL, rr, gg, bb, aa); // bottom row
+			AddAveragingCont(GetPixelColorWithOverflow(x, yi2), hTR, rr, gg, bb, aa); // top row
 		}
 		// leftmost and rightmost column
-		for (y = yi1+1; y < yi2; y++) {
-			AddAveragingCont(GetPixelColorWithOverflow(xi1,y), wBL, rr, gg, bb, aa); // left column
-			AddAveragingCont(GetPixelColorWithOverflow(xi2,y), wTR, rr, gg, bb, aa); // right column
+		for (y = yi1 + 1; y < yi2; y++) {
+			AddAveragingCont(GetPixelColorWithOverflow(xi1, y), wBL, rr, gg, bb, aa); // left column
+			AddAveragingCont(GetPixelColorWithOverflow(xi2, y), wTR, rr, gg, bb, aa); // right column
 		}
-		for (y = yi1+1; y < yi2; y++) {
-			for (x = xi1+1; x < xi2; x++) {
-				color=GetPixelColorWithOverflow(x,y);
-				rr+=color.rgbRed;
-				gg+=color.rgbGreen;
-				bb+=color.rgbBlue;
-				aa+=color.rgbReserved;
+		for (y = yi1 + 1; y < yi2; y++) {
+			for (x = xi1 + 1; x < xi2; x++) {
+				color = GetPixelColorWithOverflow(x, y);
+				rr += color.rgbRed;
+				gg += color.rgbGreen;
+				bb += color.rgbBlue;
+				aa += color.rgbReserved;
 			}
 		}
 	}
 	else {
 		// width or height greater than one:
-		CTxDibRect2 intersect; // intersection with current pixel
-		CTxDibPoint2 center;
-		for (y = yi1; y <= yi2; y++) 
-			for (x = xi1; x <= xi2; x++)  {
-				intersect = area.CrossSection(CTxDibRect2(((float)x)-0.5f, ((float)y)-0.5f, ((float)x)+0.5f, ((float)y)+0.5f));
+		TxDibRect2 intersect; // intersection with current pixel
+		TxDibPoint2 center;
+		for (y = yi1; y <= yi2; y++)
+			for (x = xi1; x <= xi2; x++) {
+				intersect = area.CrossSection(TxDibRect2(((float)x) - 0.5f, ((float)y) - 0.5f, ((float)x) + 0.5f, ((float)y) + 0.5f));
 				center = intersect.Center();
 				color = GetPixelColorInterpolated(center.x, center.y);
 				cps = intersect.Surface();
@@ -570,14 +570,14 @@ typedef long fixed;												// Our new fixed point type
 #define Divfx(x,y) (((x) << 8) / (y))							// Divide a fixed by a fixed
 #define _PIXEL DWORD											// Pixel
 
-void CTxDib::Resample2(int newWidth, int newHeight, CTxDib *dst /*= NULL */)
+void TxDib::Resample2(int newWidth, int newHeight, TxDib *dst /*= NULL */)
 {
 	// Check for valid bitmap
 	if (IsValid()) {
 		// Calculate scaling params
 		long _width = max(1, newWidth);
 		long _height = max(1, newHeight);
-		float dx = (float)_width  / (float)_width;
+		float dx = (float)_width / (float)_width;
 		float dy = (float)_height / (float)_height;
 		fixed f_dx = ftofx(dx);
 		fixed f_dy = ftofx(dy);
@@ -610,17 +610,17 @@ void CTxDib::Resample2(int newWidth, int newHeight, CTxDib *dst /*= NULL */)
 					dwSrcTotalOffset = m * _width + n;
 					DWORD dwSrcTopLeft = dwSrcTotalOffset;
 					DWORD dwSrcTopRight = dwSrcTotalOffset + 1;
-					if (n >= _width-1)
+					if (n >= _width - 1)
 						dwSrcTopRight = dwSrcTotalOffset;
 					DWORD dwSrcBottomLeft = dwSrcTotalOffset + _width;
-					if (m >= _height-1)
+					if (m >= _height - 1)
 						dwSrcBottomLeft = dwSrcTotalOffset;
 					DWORD dwSrcBottomRight = dwSrcTotalOffset + _width + 1;
-					if (n >= _width-1 || m >= _height-1)
+					if (n >= _width - 1 || m >= _height - 1)
 						dwSrcBottomRight = dwSrcTotalOffset;
-					fixed f_w1 = Mulfx(f_1-f_f, f_1-f_g);
-					fixed f_w2 = Mulfx(f_1-f_f, f_g);
-					fixed f_w3 = Mulfx(f_f, f_1-f_g);
+					fixed f_w1 = Mulfx(f_1 - f_f, f_1 - f_g);
+					fixed f_w2 = Mulfx(f_1 - f_f, f_g);
+					fixed f_w3 = Mulfx(f_f, f_1 - f_g);
 					fixed f_w4 = Mulfx(f_f, f_g);
 					RGBQUAD pixel1 = lpSrcData[dwSrcTopLeft];
 					RGBQUAD pixel2 = lpSrcData[dwSrcTopRight];
@@ -648,7 +648,7 @@ void CTxDib::Resample2(int newWidth, int newHeight, CTxDib *dst /*= NULL */)
 					lpDstData[dwDstTotalOffset].rgbReserved = (BYTE)fxtoi(Mulfx(f_w1, f_a1) + Mulfx(f_w2, f_a2) + Mulfx(f_w3, f_a3) + Mulfx(f_w4, f_a4));
 
 					// Update destination horizontal offset
-					dwDstHorizontalOffset ++;
+					dwDstHorizontalOffset++;
 				}
 				dwDstVerticalOffset += _width;
 			}
@@ -663,12 +663,12 @@ void CTxDib::Resample2(int newWidth, int newHeight, CTxDib *dst /*= NULL */)
 	}
 }
 
-bool CTxDib::QIShrink(int newWidth, int newHeight, CTxDib * dst /*= NULL */)
+bool TxDib::QIShrink(int newWidth, int newHeight, TxDib * dst /*= NULL */)
 {
 	if (!IsValid()) return false;
-	if (newWidth > _width || newHeight > _height) 
+	if (newWidth > _width || newHeight > _height)
 		return false;
-	if (newWidth == _width && newHeight == _height)  {
+	if (newWidth == _width && newHeight == _height) {
 		if (dst)
 			*dst = *this;
 		return true;
@@ -727,7 +727,7 @@ bool CTxDib::QIShrink(int newWidth, int newHeight, CTxDib * dst /*= NULL */)
 
 		srcPtrS += _width; // next round we start from new source row
 	}
-	delete [] accu; // delete helper array
+	delete[] accu; // delete helper array
 
 	// copy new image to the destination
 	if (dst) {
@@ -739,7 +739,7 @@ bool CTxDib::QIShrink(int newWidth, int newHeight, CTxDib * dst /*= NULL */)
 	return true;
 }
 
-BOOL CTxDib::SavePNG(LPCWSTR fileName)
+BOOL TxDib::SavePNG(LPCWSTR fileName)
 {
 	FIBITMAP *dib = FreeImage_Allocate(_width, _height, 32);
 	memcpy(FreeImage_GetBits(dib), _bits, _width * _height * 4);
@@ -748,7 +748,7 @@ BOOL CTxDib::SavePNG(LPCWSTR fileName)
 	return ret;
 }
 
-BOOL CTxDib::SaveJPG(LPCWSTR fileName, int quality /*= JPEG_QUALITY_GOOD*/)
+BOOL TxDib::SaveJPG(LPCWSTR fileName, int quality /*= JPEG_QUALITY_GOOD*/)
 {
 	FIBITMAP *dib = FreeImage_Allocate(_width, _height, 32);
 	memcpy(FreeImage_GetBits(dib), _bits, _width * _height * 4);
@@ -767,7 +767,7 @@ BOOL CTxDib::SaveJPG(LPCWSTR fileName, int quality /*= JPEG_QUALITY_GOOD*/)
 	return ret;
 }
 
-BOOL CTxDib::SaveBMP(LPCWSTR fileName)
+BOOL TxDib::SaveBMP(LPCWSTR fileName)
 {
 	FIBITMAP *dib = FreeImage_Allocate(_width, _height, 32);
 	memcpy(FreeImage_GetBits(dib), _bits, _width * _height * 4);
@@ -776,23 +776,23 @@ BOOL CTxDib::SaveBMP(LPCWSTR fileName)
 	return ret;
 }
 
-BOOL CTxDib::CalcAlpha(CTxDib *imgWhite, CTxDib *imgBlack)
+BOOL TxDib::CalcAlpha(TxDib *imgWhite, TxDib *imgBlack)
 {
-	if (!imgBlack || !imgWhite)	
+	if (!imgBlack || !imgWhite)
 		return FALSE;
-	if (imgWhite->GetWidth()  != imgBlack->GetWidth() ||
+	if (imgWhite->GetWidth() != imgBlack->GetWidth() ||
 		imgWhite->GetHeight() != imgBlack->GetHeight())
 		return FALSE;
 	Destroy();
 
 	_width = imgBlack->GetWidth();
-	_height	= imgBlack->GetHeight();
+	_height = imgBlack->GetHeight();
 	size_t cnt = _width * _height;
 	size_t sz = cnt * sizeof(RGBQUAD);
-	_bits = (LPRGBQUAD) malloc(sz);
+	_bits = (LPRGBQUAD)malloc(sz);
 
 	int alphaR, alphaG, alphaB, resultR, resultG, resultB;
-	for (size_t i=0; i < cnt; i++) {
+	for (size_t i = 0; i < cnt; i++) {
 		alphaR = imgBlack->_bits[i].rgbRed - imgWhite->_bits[i].rgbRed + 255;
 		alphaG = imgBlack->_bits[i].rgbGreen - imgWhite->_bits[i].rgbGreen + 255;
 		alphaB = imgBlack->_bits[i].rgbBlue - imgWhite->_bits[i].rgbBlue + 255;
@@ -817,7 +817,7 @@ BOOL CTxDib::CalcAlpha(CTxDib *imgWhite, CTxDib *imgBlack)
 
 #define RBLOCK 96
 
-void CTxDib::RotateLeft(CTxDib *dst /*= NULL*/)
+void TxDib::RotateLeft(TxDib *dst /*= NULL*/)
 {
 	if (!IsValid()) return;
 
@@ -839,7 +839,7 @@ void CTxDib::RotateLeft(CTxDib *dst /*= NULL*/)
 				for (y = ys; y < min(height, ys + RBLOCK); y++) {
 					*dstPtr = *srcPtr;
 					srcPtr++;
-					dstPtr+= width;
+					dstPtr += width;
 				}
 			}
 	}
@@ -849,7 +849,7 @@ void CTxDib::RotateLeft(CTxDib *dst /*= NULL*/)
 		_copy(newBbits, width, height, FALSE);
 }
 
-void CTxDib::RotateRight(CTxDib *dst /*= NULL*/)
+void TxDib::RotateRight(TxDib *dst /*= NULL*/)
 {
 	if (!IsValid()) return;
 
@@ -883,26 +883,26 @@ void CTxDib::RotateRight(CTxDib *dst /*= NULL*/)
 
 //////////////////////////////////////////////////////////////////////////
 
-CTxSkinDIB::CTxSkinDIB()
+TxSkinDib::TxSkinDib()
 {
 	ZeroMemory(&_margins, sizeof(_margins));
-	_tileX	= FALSE;
-	_tileY	= FALSE;
+	_tileX = FALSE;
+	_tileY = FALSE;
 }
 
-CTxSkinDIB::~CTxSkinDIB()
+TxSkinDib::~TxSkinDib()
 {
 }
 
-BOOL CTxSkinDIB::Load(LPCWSTR fileName, MARGINS *mg, BOOL tileX, BOOL tileY)
+BOOL TxSkinDib::Load(LPCWSTR fileName, MARGINS *mg, BOOL tileX, BOOL tileY)
 {
-	CTxDib dib;
+	TxDib dib;
 	if (dib.Load(fileName))
 		return Load(&dib, mg, tileX, tileY);
 	return FALSE;
 }
 
-BOOL CTxSkinDIB::Load(CTxDib *dib, MARGINS *mg, BOOL tileX, BOOL tileY)
+BOOL TxSkinDib::Load(TxDib *dib, MARGINS *mg, BOOL tileX, BOOL tileY)
 {
 	if (!dib) return FALSE;
 	_margins = *mg;
@@ -930,7 +930,7 @@ BOOL CTxSkinDIB::Load(CTxDib *dib, MARGINS *mg, BOOL tileX, BOOL tileY)
 	return TRUE;
 }
 
-void CTxSkinDIB::Draw(HDC hdc, LPRECT rcDraw, LPRECT rcClip)
+void TxSkinDib::Draw(HDC hdc, LPRECT rcDraw, LPRECT rcClip)
 {
 	RECT rcPart;
 	RECT rcTmp;
@@ -1028,12 +1028,12 @@ void CTxSkinDIB::Draw(HDC hdc, LPRECT rcDraw, LPRECT rcClip)
 		else if (_tileX && _tileY)
 			_dibCenter.Tile(hdc, &rcPart, rcClip);
 		else if (_tileX && !_tileY) {
-			CTxDib dib;
+			TxDib dib;
 			_dibCenter.Resample(_dibCenter.GetWidth(), rcPart.bottom - rcPart.top, &dib);
 			dib.Tile(hdc, &rcPart, rcClip);
 		}
 		else {
-			CTxDib dib;
+			TxDib dib;
 			_dibCenter.Resample(rcPart.right - rcPart.left, _dibCenter.GetHeight(), &dib);
 			dib.Tile(hdc, &rcPart, rcClip);
 		}
@@ -1042,7 +1042,7 @@ void CTxSkinDIB::Draw(HDC hdc, LPRECT rcDraw, LPRECT rcClip)
 
 //////////////////////////////////////////////////////////////////////////
 
-CTxDibSet::CTxDibSet(CTxDib *img, int rows, int cols)
+TxDibSet::TxDibSet(TxDib *img, int rows, int cols)
 {
 	_cols = cols;
 	_rows = rows;
@@ -1051,7 +1051,7 @@ CTxDibSet::CTxDibSet(CTxDib *img, int rows, int cols)
 	for (int row = 0; row < rows; row++) {
 		imgCols vCols;
 		for (int col = 0; col < cols; col++) {
-			CTxDib *frame = new CTxDib;
+			TxDib *frame = new TxDib;
 			img->Crop(col * _width, row * _height, (col + 1) * _width, (row + 1) * _height, frame);
 			vCols.push_back(frame);
 		}
@@ -1059,7 +1059,7 @@ CTxDibSet::CTxDibSet(CTxDib *img, int rows, int cols)
 	}
 }
 
-CTxDibSet::~CTxDibSet()
+TxDibSet::~TxDibSet()
 {
 	for (size_t row = 0; row < _items.size(); row++)
 		for (size_t col = 0; col < _items[row].size(); col++)

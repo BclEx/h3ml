@@ -3,20 +3,20 @@
 #include "HtmlViewWnd.h"
 #include "ToolbarWnd.h"
 
-CBrowserWnd::CBrowserWnd(HINSTANCE hInst)
+BrowserWnd::BrowserWnd(HINSTANCE hInst)
 {
 	_hInst = hInst;
 	_hWnd = NULL;
-	_view = new CHTMLViewWnd(hInst, &_browserContext, this);
+	_view = new HtmlViewWnd(hInst, &_browserContext, this);
 #ifndef NO_TOOLBAR
-	_toolbar = new CToolbarWnd(hInst, this);
+	_toolbar = new ToolbarWnd(hInst, this);
 #endif
 
 	WNDCLASS wc;
 	if (!GetClassInfo(_hInst, BROWSERWND_CLASS, &wc)) {
 		ZeroMemory(&wc, sizeof(wc));
 		wc.style = CS_DBLCLKS /*| CS_HREDRAW | CS_VREDRAW*/;
-		wc.lpfnWndProc = (WNDPROC)CBrowserWnd::WndProc;
+		wc.lpfnWndProc = (WNDPROC)BrowserWnd::WndProc;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = _hInst;
@@ -63,7 +63,7 @@ CBrowserWnd::CBrowserWnd(HINSTANCE hInst)
 	}
 }
 
-CBrowserWnd::~CBrowserWnd()
+BrowserWnd::~BrowserWnd()
 {
 	if (_view) delete _view;
 #ifndef NO_TOOLBAR
@@ -71,11 +71,11 @@ CBrowserWnd::~CBrowserWnd()
 #endif
 }
 
-LRESULT CALLBACK CBrowserWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK BrowserWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	CBrowserWnd *this_ = NULL;
+	BrowserWnd *this_ = NULL;
 	if (IsWindow(hWnd)) {
-		this_ = (CBrowserWnd *)GetProp(hWnd, TEXT("browser_this"));
+		this_ = (BrowserWnd *)GetProp(hWnd, TEXT("browser_this"));
 		if (this_ && this_->_hWnd != hWnd)
 			this_ = NULL;
 	}
@@ -85,7 +85,7 @@ LRESULT CALLBACK CBrowserWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, L
 			return TRUE;
 		case WM_CREATE: {
 			LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-			this_ = (CBrowserWnd *)(lpcs->lpCreateParams);
+			this_ = (BrowserWnd *)(lpcs->lpCreateParams);
 			SetProp(hWnd, TEXT("browser_this"), (HANDLE)this_);
 			this_->_hWnd = hWnd;
 			this_->OnCreate();
@@ -110,7 +110,7 @@ LRESULT CALLBACK CBrowserWnd::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, L
 	return DefWindowProc(hWnd, uMessage, wParam, lParam);
 }
 
-void CBrowserWnd::OnCreate()
+void BrowserWnd::OnCreate()
 {
 	RECT rcClient;
 	GetClientRect(_hWnd, &rcClient);
@@ -123,7 +123,7 @@ void CBrowserWnd::OnCreate()
 	SetFocus(_view->Wnd());
 }
 
-void CBrowserWnd::OnSize(int width, int height)
+void BrowserWnd::OnSize(int width, int height)
 {
 	RECT rcClient;
 	GetClientRect(_hWnd, &rcClient);
@@ -140,47 +140,47 @@ void CBrowserWnd::OnSize(int width, int height)
 #endif
 }
 
-void CBrowserWnd::OnDestroy()
+void BrowserWnd::OnDestroy()
 {
 }
 
-void CBrowserWnd::Create()
+void BrowserWnd::Create()
 {
 	_hWnd = CreateWindow(BROWSERWND_CLASS, L"Light HTML", WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, _hInst, (LPVOID)this);
 	ShowWindow(_hWnd, SW_SHOW);
 }
 
-void CBrowserWnd::Open(LPCWSTR path)
+void BrowserWnd::Open(LPCWSTR path)
 {
 	if (_view)
 		_view->Open(path, true);
 }
 
-void CBrowserWnd::Back()
+void BrowserWnd::Back()
 {
 	if (_view)
 		_view->Back();
 }
 
-void CBrowserWnd::Forward()
+void BrowserWnd::Forward()
 {
 	if (_view)
 		_view->Forward();
 }
 
-void CBrowserWnd::Reload()
+void BrowserWnd::Reload()
 {
 	if (_view)
 		_view->Refresh();
 }
 
-void CBrowserWnd::CalcTime(int calcRepeat)
+void BrowserWnd::CalcTime(int calcRepeat)
 {
 	if (_view)
 		_view->Render(TRUE, TRUE, calcRepeat);
 }
 
-void CBrowserWnd::OnPageLoaded(LPCWSTR url)
+void BrowserWnd::OnPageLoaded(LPCWSTR url)
 {
 	if (_view)
 		SetFocus(_view->Wnd());

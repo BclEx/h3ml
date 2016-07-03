@@ -61,7 +61,7 @@ media_query::ptr media_query::create_fro_string(const tstring &str, const std::s
 									expr.val = (int)(length.val() * 2.54);
 								else {
 									if (doc)
-										doc->cvt_units(length, doc->container()->get_default_font_size());
+										doc->cvt_units(length, doc->container()->GetDefaultFontSize());
 									expr.val = (int)length.val();
 								}
 							}

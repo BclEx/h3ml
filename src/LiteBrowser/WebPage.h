@@ -4,10 +4,10 @@
 #include "Http.h"
 
 using namespace litehtml;
-class CHTMLViewWnd;
+class HtmlViewWnd;
 class WebPage : public cairo_container
 {
-	CHTMLViewWnd * _parent;
+	HtmlViewWnd *_parent;
 	LONG _refCount;
 public:
 	Http _http;
@@ -20,7 +20,7 @@ public:
 	std::wstring _waited_file;
 	std::wstring _hash;
 public:
-	WebPage(CHTMLViewWnd *parent);
+	WebPage(HtmlViewWnd *parent);
 	virtual ~WebPage();
 
 	void Load(LPCWSTR url);

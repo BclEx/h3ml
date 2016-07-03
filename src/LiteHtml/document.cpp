@@ -39,7 +39,7 @@ document::~document()
 	_over_element = nullptr;
 	if (_container)
 		for (fonts_map::iterator f = _fonts.begin(); f != _fonts.end(); f++)
-			_container->delete_font(f->second.font);
+			_container->DeleteFont(f->second.font);
 }
 
 document::ptr document::createFromString(const tchar_t *str, document_container *objPainter, context *ctx, css *user_styles)
@@ -65,7 +65,7 @@ document::ptr document::createFromUTF8(const char *str, document_container *objP
 
 	// Let's process created elements tree
 	if (doc->_root) {
-		doc->container()->get_media_features(doc->_media);
+		doc->container()->GetMediaFeatures(doc->_media);
 
 		// apply master CSS
 		doc->_root->apply_stylesheet(ctx->master_css());
@@ -111,9 +111,9 @@ uint_ptr document::add_font( const tchar_t* name, int size, const tchar_t* weigh
 {
 	uint_ptr ret = 0;
 	if (!name || (name && !t_strcasecmp(name, _t("inherit"))))
-		name = _container->get_default_font_name();
+		name = _container->GetDefaultFontName();
 	if (!size)
-		size = container()->get_default_font_size();
+		size = container()->GetDefaultFontSize();
 	tchar_t strSize[20];
 	t_itoa(size, strSize, 20, 10);
 	tstring key = name;
@@ -158,7 +158,7 @@ uint_ptr document::add_font( const tchar_t* name, int size, const tchar_t* weigh
 		}
 
 		font_item fi= {0};
-		fi.font = _container->create_font(name, size, fw, fs, decor, &fi.metrics);
+		fi.font = _container->CreateFont(name, size, fw, fs, decor, &fi.metrics);
 		_fonts[key] = fi;
 		ret = fi.font;
 		if (fm)
@@ -170,9 +170,9 @@ uint_ptr document::add_font( const tchar_t* name, int size, const tchar_t* weigh
 uint_ptr document::get_font(const tchar_t *name, int size, const tchar_t *weight, const tchar_t *style, const tchar_t *decoration, font_metrics *fm)
 {
 	if (!name || (name && !t_strcasecmp(name, _t("inherit"))))
-		name = _container->get_default_font_name();
+		name = _container->GetDefaultFontName();
 	if (!size)
-		size = container()->get_default_font_size();
+		size = container()->GetDefaultFontSize();
 	tchar_t strSize[20];
 	t_itoa(size, strSize, 20, 10);
 	tstring key = name;
@@ -242,10 +242,10 @@ int document::cvt_units(css_length &val, int fontSize, int size) const
 	switch (val.units()) {
 	case css_units_percentage: ret = val.calc_percent(size); break;
 	case css_units_em: ret = round_f(val.val() * fontSize); val.set_value((float)ret, css_units_px); break;
-	case css_units_pt: ret = _container->pt_to_px((int)val.val()); val.set_value((float)ret, css_units_px); break;
-	case css_units_in: ret = _container->pt_to_px((int)(val.val() * 72)); val.set_value((float)ret, css_units_px); break;
-	case css_units_cm: ret = _container->pt_to_px((int)(val.val() * 0.3937 * 72)); val.set_value((float)ret, css_units_px); break;
-	case css_units_mm: ret = _container->pt_to_px((int)(val.val() * 0.3937 * 72) / 10); val.set_value((float)ret, css_units_px); break;
+	case css_units_pt: ret = _container->PtToPx((int)val.val()); val.set_value((float)ret, css_units_px); break;
+	case css_units_in: ret = _container->PtToPx((int)(val.val() * 72)); val.set_value((float)ret, css_units_px); break;
+	case css_units_cm: ret = _container->PtToPx((int)(val.val() * 0.3937 * 72)); val.set_value((float)ret, css_units_px); break;
+	case css_units_mm: ret = _container->PtToPx((int)(val.val() * 0.3937 * 72) / 10); val.set_value((float)ret, css_units_px); break;
 	case css_units_vw: ret = (int)((double)_media.width * (double)val.val() / 100.0); break;
 	case css_units_vh: ret = (int)((double)_media.height * (double)val.val() / 100.0); break;
 	case css_units_vmin: ret = (int)((double)std::min(_media.height, _media.width) * (double)val.val() / 100.0); break;
@@ -289,7 +289,7 @@ bool document::on_mouse_over(int x, int y, int client_x, int client_y, position:
 			state_was_changed = true;
 		cursor = _over_element->get_cursor();
 	}
-	_container->set_cursor(cursor ? cursor : _t("auto"));
+	_container->SetCursor(cursor ? cursor : _t("auto"));
 	if (state_was_changed)
 		return _root->find_styles_changes(redraw_boxes, 0, 0);
 	return false;
@@ -326,7 +326,7 @@ bool document::on_lbutton_down(int x, int y, int client_x, int client_y, positio
 			state_was_changed = true;
 		cursor = _over_element->get_cursor();
 	}
-	_container->set_cursor(cursor ? cursor : _t("auto"));
+	_container->SetCursor(cursor ? cursor : _t("auto"));
 	if (state_was_changed)
 		return _root->find_styles_changes(redraw_boxes, 0, 0);
 	return false;
@@ -347,7 +347,7 @@ element::ptr document::create_element(const tchar_t *tag_name, const string_map 
 	element::ptr newTag;
 	document::ptr this_doc = shared_from_this();
 	if (_container)
-		newTag = _container->create_element(tag_name, attributes, this_doc);
+		newTag = _container->CreateElement(tag_name, attributes, this_doc);
 	if (!newTag) {
 		if (!t_strcmp(tag_name, _t("br")))
 			newTag = std::make_shared<el_break>(this_doc);
@@ -403,7 +403,7 @@ void document::add_fixed_box( const position &pos )
 bool document::media_changed()
 {
 	if (!_media_lists.empty()) {
-		container()->get_media_features(_media);
+		container()->GetMediaFeatures(_media);
 		if (update_media_lists(_media)) {
 			_root->refresh_styles();
 			_root->parse_styles();
@@ -417,7 +417,7 @@ bool document::lang_changed()
 {
 	if (!_media_lists.empty()) {
 		tstring culture;
-		container()->get_language(_lang, culture);
+		container()->GetLanguage(_lang, culture);
 		if (!culture.empty())
 			_culture = _lang + _t('-') + culture;
 		else

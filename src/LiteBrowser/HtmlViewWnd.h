@@ -7,8 +7,8 @@
 #define WM_PAGE_LOADED		(WM_USER + 1001)
 
 using namespace litehtml;
-class CBrowserWnd;
-class CHTMLViewWnd
+class BrowserWnd;
+class HtmlViewWnd
 {
 	HWND _hWnd;
 	HINSTANCE _hInst;
@@ -22,10 +22,10 @@ class CHTMLViewWnd
 	WebPage *_page_next;
 	CRITICAL_SECTION _sync;
 	Dib _dib;
-	CBrowserWnd *_parent;
+	BrowserWnd *_parent;
 public:
-	CHTMLViewWnd(HINSTANCE	hInst, context *ctx, CBrowserWnd *parent);
-	virtual ~CHTMLViewWnd();
+	HtmlViewWnd(HINSTANCE hInst, context *ctx, BrowserWnd *parent);
+	virtual ~HtmlViewWnd();
 
 	void Create(int x, int y, int width, int height, HWND parent);
 	void Open(LPCWSTR url, bool reload = FALSE);
@@ -60,7 +60,7 @@ protected:
 	virtual void OnLButtonUp(int x, int y);
 	virtual void OnMouseLeave();
 	virtual void OnPageReady();
-	
+
 	void Redraw(LPRECT rcDraw, BOOL update);
 	void UpdateScroll();
 	void UpdateCursor();
@@ -68,20 +68,20 @@ protected:
 	void ScrollTo(int newLeft, int newTop);
 
 private:
-	static LRESULT	CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 
-inline context *CHTMLViewWnd::GetHtmlContext()
+inline context *HtmlViewWnd::GetHtmlContext()
 {
 	return _context;
 }
 
-inline void CHTMLViewWnd::Lock()
+inline void HtmlViewWnd::Lock()
 {
 	EnterCriticalSection(&_sync);
 }
 
-inline void CHTMLViewWnd::Unlock()
+inline void HtmlViewWnd::Unlock()
 {
 	LeaveCriticalSection(&_sync);
 }

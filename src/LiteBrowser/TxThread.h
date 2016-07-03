@@ -1,6 +1,6 @@
 #pragma once
 
-class CTxThread
+class TxThread
 {
 	HANDLE _hThread;
 	HANDLE _hStop;
@@ -8,8 +8,8 @@ class CTxThread
 
 	static DWORD WINAPI sThreadProc(LPVOID lpParameter);
 public:
-	CTxThread(void);
-	virtual ~CTxThread(void);
+	TxThread(void);
+	virtual ~TxThread(void);
 	virtual DWORD ThreadProc() = 0;
 
 	DWORD GetID() { return _trdID; }

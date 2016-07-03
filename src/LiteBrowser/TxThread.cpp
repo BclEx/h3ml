@@ -1,28 +1,28 @@
 #include "globals.h"
 #include "TxThread.h"
 
-CTxThread::CTxThread()
+TxThread::TxThread()
 {
 	_hThread = NULL;
 	_hStop = NULL;
 	_trdID = NULL;
 }
 
-CTxThread::~CTxThread()
+TxThread::~TxThread()
 {
 	Stop();
 	if (_hThread) CloseHandle(_hThread);
 	if (_hStop) CloseHandle(_hStop);
 }
 
-void CTxThread::Run()
+void TxThread::Run()
 {
 	Stop();
 	_hStop = CreateEvent(NULL, FALSE, FALSE, NULL);
 	_hThread = CreateThread(NULL, 0, sThreadProc, (LPVOID)this, 0, &_trdID);
 }
 
-void CTxThread::Stop()
+void TxThread::Stop()
 {
 	if (_hThread) {
 		if (_hStop)
@@ -35,18 +35,18 @@ void CTxThread::Stop()
 	_hStop = NULL;
 }
 
-DWORD WINAPI CTxThread::sThreadProc(LPVOID lpParameter)
+DWORD WINAPI TxThread::sThreadProc(LPVOID lpParameter)
 {
-	CTxThread *this_ = (CTxThread *)lpParameter;
+	TxThread *this_ = (TxThread *)lpParameter;
 	return this_->ThreadProc();
 }
 
-BOOL CTxThread::WaitForStop(DWORD ms)
+BOOL TxThread::WaitForStop(DWORD ms)
 {
 	return (WaitForSingleObject(_hStop, ms) != WAIT_TIMEOUT ? TRUE : FALSE);
 }
 
-void CTxThread::PostMessage(UINT Msg, WPARAM wParam, LPARAM lParam)
+void TxThread::PostMessage(UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	if (_hThread)
 		PostThreadMessage(_trdID, Msg, wParam, lParam);

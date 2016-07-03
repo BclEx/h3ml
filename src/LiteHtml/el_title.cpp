@@ -10,5 +10,5 @@ void el_title::parse_attributes()
 {
 	tstring text;
 	get_text(text);
-	get_document()->container()->set_caption(text.c_str());
+	get_document()->container()->SetCaption(text.c_str());
 }

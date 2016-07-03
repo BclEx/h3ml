@@ -14,7 +14,7 @@ void WebHistory::UrlOpened(const std::wstring &url)
 {
 	if (!_items.empty()) {
 		if (_current_item != _items.size() - 1) {
-			if(_current_item > 0 && _items[_current_item - 1] == url)
+			if (_current_item > 0 && _items[_current_item - 1] == url)
 				_current_item--;
 			else if (_current_item < _items.size() - 1 && _items[_current_item + 1] == url)
 				_current_item++;
@@ -27,7 +27,7 @@ void WebHistory::UrlOpened(const std::wstring &url)
 		else {
 			if (_current_item > 0 && _items[_current_item - 1] == url)
 				_current_item--;
-			else  {
+			else {
 				_items.push_back(url);
 				_current_item = _items.size() - 1;
 			}

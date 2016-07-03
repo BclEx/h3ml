@@ -120,7 +120,7 @@ void css::parse_atrule(const tstring &text, const tchar_t *baseurl, const std::s
 					tstring css_baseurl;
 					if (baseurl)
 						css_baseurl = baseurl;
-					doc_cont->import_css(css_text, url, css_baseurl);
+					doc_cont->ImportCss(css_text, url, css_baseurl);
 					if (!css_text.empty()) {
 						media_query_list::ptr new_media = media;
 						if (!tokens.empty())

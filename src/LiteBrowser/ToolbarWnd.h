@@ -5,20 +5,21 @@
 
 #define TOOLBARWND_CLASS L"TOOLBAR_WINDOW"
 
-class CBrowserWnd;
-class CToolbarWnd : public cairo_container
+using namespace litehtml;
+class BrowserWnd;
+class ToolbarWnd : public cairo_container
 {
 	HWND _hWnd;
 	HINSTANCE _hInst;
-	litehtml::context _context;
-	litehtml::document::ptr	_doc;
-	CBrowserWnd *_parent;
+	context _context;
+	document::ptr _doc;
+	BrowserWnd *_parent;
 	std::shared_ptr<el_omnibox>	_omnibox;
-	litehtml::tstring _cursor;
+	tstring _cursor;
 	BOOL _inCapture;
 public:
-	CToolbarWnd(HINSTANCE hInst, CBrowserWnd *parent);
-	virtual ~CToolbarWnd();
+	ToolbarWnd(HINSTANCE hInst, BrowserWnd *parent);
+	virtual ~ToolbarWnd();
 
 	void Create(int x, int y, int width, HWND parent);
 	HWND Wnd() { return _hWnd; }
@@ -30,14 +31,14 @@ public:
 	virtual void MakeUrl(LPCWSTR url, LPCWSTR basepath, std::wstring &out);
 	virtual cairo_container::image_ptr GetImage(LPCWSTR url, bool redrawOnReady);
 
-	// litehtml::document_container members
-	virtual	void SetCaption(const litehtml::tchar_t *caption);
-	virtual	void SetBaseUrl(const litehtml::tchar_t *baseUrl);
-	virtual	void Link(std::shared_ptr<litehtml::document> &doc, litehtml::element::ptr el);
-	virtual void ImportCss(litehtml::tstring &text, const litehtml::tstring &url, litehtml::tstring &baseUrl);
-	virtual	void OnAnchorClick(const litehtml::tchar_t *url, const litehtml::element::ptr &el);
-	virtual	void SetCursor(const litehtml::tchar_t *cursor);
-	virtual std::shared_ptr<litehtml::element> CreateElement(const litehtml::tchar_t *tagName, const litehtml::string_map &attributes, const std::shared_ptr<litehtml::document> &doc);
+	// document_container members
+	virtual	void SetCaption(const tchar_t *caption);
+	virtual	void SetBaseUrl(const tchar_t *baseUrl);
+	virtual	void Link(std::shared_ptr<document> &doc, element::ptr el);
+	virtual void ImportCss(tstring &text, const tstring &url, tstring &baseUrl);
+	virtual	void OnAnchorClick(const tchar_t *url, const element::ptr &el);
+	virtual	void SetCursor(const tchar_t *cursor);
+	virtual std::shared_ptr<element> CreateElement(const tchar_t *tagName, const string_map &attributes, const std::shared_ptr<document> &doc);
 
 protected:
 	virtual void OnCreate();
@@ -50,7 +51,7 @@ protected:
 	virtual void OnMouseLeave();
 	virtual void OnOmniboxClicked();
 
-	virtual void GetClientRect(litehtml::position &client) const;
+	virtual void GetClientRect(position &client) const;
 
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);

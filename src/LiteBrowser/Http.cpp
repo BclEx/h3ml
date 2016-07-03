@@ -61,7 +61,7 @@ VOID CALLBACK Http::HttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD
 			dwError = request->OnRequestError(((WINHTTP_ASYNC_RESULT*)lpvStatusInformation)->dwError);
 			break;
 		}
-		if(dwError != ERROR_SUCCESS)
+		if (dwError != ERROR_SUCCESS)
 			request->Cancel();
 	}
 	CoUninitialize();
@@ -112,7 +112,7 @@ HttpRequest::HttpRequest()
 	_status = 0;
 	_error = 0;
 	_downloaded_length = 0;
-	_content_length	= 0;
+	_content_length = 0;
 	_refCount = 1;
 	_hConnection = NULL;
 	_hRequest = NULL;
@@ -155,7 +155,7 @@ BOOL HttpRequest::Create(LPCWSTR url, HINTERNET hSession)
 
 	_hConnection = WinHttpConnect(hSession, host.c_str(), urlComp.nPort, 0);
 
-	PCWSTR pwszAcceptTypes[] = {L"*/*", NULL};
+	PCWSTR pwszAcceptTypes[] = { L"*/*", NULL };
 	path += extra;
 	_hRequest = WinHttpOpenRequest(_hConnection, L"GET", path.c_str(), NULL, NULL, pwszAcceptTypes, flags);
 
@@ -196,7 +196,7 @@ DWORD HttpRequest::OnSendRequestComplete()
 {
 	Lock();
 	DWORD dwError = ERROR_SUCCESS;
-	if (!WinHttpReceiveResponse(_hRequest, NULL)) 
+	if (!WinHttpReceiveResponse(_hRequest, NULL))
 		dwError = GetLastError();
 	Unlock();
 	return dwError;
@@ -209,7 +209,7 @@ DWORD HttpRequest::OnHeadersAvailable()
 	_status = 0;
 	DWORD StatusCodeLength = sizeof(_status);
 	OnHeadersReady(_hRequest);
-	if (!WinHttpQueryHeaders(_hRequest, WINHTTP_QUERY_FLAG_NUMBER | WINHTTP_QUERY_STATUS_CODE, NULL, &_status, &StatusCodeLength, NULL)) 
+	if (!WinHttpQueryHeaders(_hRequest, WINHTTP_QUERY_FLAG_NUMBER | WINHTTP_QUERY_STATUS_CODE, NULL, &_status, &StatusCodeLength, NULL))
 		dwError = GetLastError();
 	else {
 		WCHAR buf[255];
@@ -245,7 +245,7 @@ DWORD HttpRequest::OnRequestError(DWORD dwError)
 DWORD HttpRequest::ReadData()
 {
 	DWORD dwError = ERROR_SUCCESS;
-	if (!WinHttpReadData(_hRequest, _buffer,  sizeof(_buffer), NULL))
+	if (!WinHttpReadData(_hRequest, _buffer, sizeof(_buffer), NULL))
 		dwError = GetLastError();
 	return dwError;
 }

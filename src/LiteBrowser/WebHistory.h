@@ -1,11 +1,11 @@
 #pragma once
 
-typedef std::vector<std::wstring> string_vector;
+typedef std::vector<std::wstring> webHistory_vector;
 
 class WebHistory
 {
-	string_vector _items;
-	string_vector::size_type _current_item;
+	webHistory_vector _items;
+	webHistory_vector::size_type _current_item;
 public:
 	WebHistory();
 	virtual ~WebHistory();

@@ -19,7 +19,7 @@ void el_link::parse_attributes()
 		{
 			tstring css_text;
 			tstring css_baseurl;
-			doc->container()->import_css(css_text, href, css_baseurl);
+			doc->container()->ImportCss(css_text, href, css_baseurl);
 			if (!css_text.empty()) {
 				doc->add_stylesheet(css_text.c_str(), css_baseurl.c_str(), media);
 				processed = true;
@@ -27,5 +27,5 @@ void el_link::parse_attributes()
 		}
 	}
 	if (!processed)
-		doc->container()->link(doc, shared_from_this());
+		doc->container()->Link(doc, shared_from_this());
 }

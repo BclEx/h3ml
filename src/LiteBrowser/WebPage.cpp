@@ -2,7 +2,7 @@
 #include "WebPage.h"
 #include "HtmlViewWnd.h"
 
-WebPage::WebPage(CHTMLViewWnd *parent)
+WebPage::WebPage(HtmlViewWnd *parent)
 {
 	_refCount = 1;
 	_parent = parent;
@@ -19,7 +19,7 @@ void WebPage::SetCaption(const tchar_t *caption)
 #ifndef LITEHTML_UTF8
 	_caption = caption;
 #else
-	LPWSTR captionW = cairo_font::utf8_to_wchar(caption);
+	LPWSTR captionW = cairo_font::Utf8ToWchar(caption);
 	_caption = captionW;
 	delete captionW;
 #endif
@@ -30,17 +30,17 @@ void WebPage::SetBaseUrl(const tchar_t *baseUrl)
 #ifndef LITEHTML_UTF8
 	if (baseUrl) {
 		if (PathIsRelative(baseUrl) && !PathIsURL(baseUrl))
-			make_url(baseUrl, _url.c_str(), _base_path);
+			MakeUrl(baseUrl, _url.c_str(), _base_path);
 		else
 			_base_path = baseUrl;
 	}
 	else
 		_base_path = _url;
 #else
-	LPWSTR bu = cairo_font::utf8_to_wchar(baseUrl);
+	LPWSTR bu = cairo_font::Utf8ToWchar(baseUrl);
 	if (bu) {
-		if(PathIsRelative(bu) && !PathIsURL(bu))
-			make_url(bu, _url.c_str(), m_base_path);
+		if (PathIsRelative(bu) && !PathIsURL(bu))
+			MakeUrl(bu, _url.c_str(), _base_path);
 		else
 			_base_path = bu;
 	}
@@ -118,9 +118,9 @@ void WebPage::ImportCss(tstring &text, const tstring &url, tstring &baseurl)
 			delete css;
 		}
 #else
-		LPSTR css = (LPSTR)load_utf8_file(_waited_file.c_str(), false, L"UTF-8");
+		LPSTR css = (LPSTR)LoadUtf8File(_waited_file.c_str(), false, L"UTF-8");
 		if (css) {
-			LPSTR css_urlA = cairo_font::wchar_to_utf8(css_url.c_str());
+			LPSTR css_urlA = cairo_font::WcharToUtf8(css_url.c_str());
 			baseurl = css_urlA;
 			text = css;
 			delete css;
@@ -142,7 +142,7 @@ void WebPage::SetCursor(const tchar_t *cursor)
 #ifndef LITEHTML_UTF8
 	_cursor = cursor;
 #else
-	LPWSTR v = cairo_font::utf8_to_wchar(cursor);
+	LPWSTR v = cairo_font::Utf8ToWchar(cursor);
 	if (v) {
 		_cursor = v;
 		delete v;
@@ -160,7 +160,7 @@ cairo_container::image_ptr WebPage::GetImage(LPCWSTR url, bool redrawOnReady)
 			_http.DownloadFile(url, new WebFile(this, WebFile_Image_Rerender));
 	}
 	else {
-		img = cairo_container::image_ptr(new CTxDib);
+		img = cairo_container::image_ptr(new TxDib);
 		if (!img->Load(url))
 			img = nullptr;
 	}
@@ -190,7 +190,7 @@ void WebPage::OnDocumentLoaded(LPCWSTR file, LPCWSTR encoding, LPCWSTR realUrl)
 		lstrcpyA((LPSTR)htmlText, txt);
 	}
 	_doc = document::createFromUTF8((const char *)htmlText, this, _parent->GetHtmlContext());
-	delete html_text;
+	delete htmlText;
 #else
 	LPWSTR htmlText = LoadTextFile(file, true, encoding);
 	if (!htmlText) {
@@ -222,13 +222,13 @@ void WebPage::OnDocumentError(DWORD dwError, LPCWSTR errMsg)
 #ifdef LITEHTML_UTF8
 	std::string txt = "<h1>Something Wrong</h1>";
 	if (errMsg) {
-		LPSTR errMsg_utf8 = cairo_font::wchar_to_utf8(errMsg);
+		LPSTR errMsg_utf8 = cairo_font::WcharToUtf8(errMsg);
 		txt += "<p>";
 		txt += errMsg_utf8;
 		txt += "</p>";
 		delete errMsg_utf8;
 	}
-	_doc = document::createFromUTF8((const char*)txt.c_str(), this, _parent->GetHtmlContext());
+	_doc = document::createFromUTF8((const char *)txt.c_str(), this, _parent->GetHtmlContext());
 #else
 	std::wstring txt = L"<h1>Something Wrong</h1>";
 	if (errMsg) {
@@ -243,9 +243,9 @@ void WebPage::OnDocumentError(DWORD dwError, LPCWSTR errMsg)
 
 void WebPage::OnImageLoaded(LPCWSTR file, LPCWSTR url, bool redrawOnly)
 {
-	cairo_container::image_ptr img = cairo_container::image_ptr(new CTxDib);
+	cairo_container::image_ptr img = cairo_container::image_ptr(new TxDib);
 	if (img->Load(file)) {
-		cairo_container::add_image(std::wstring(url), img);
+		cairo_container::AddImage(std::wstring(url), img);
 		if (_doc)
 			PostMessage(_parent->Wnd(), WM_IMAGE_LOADED, (WPARAM)(redrawOnly ? 1 : 0), 0);
 	}
@@ -300,7 +300,7 @@ void WebPage::GetUrl(std::wstring &url)
 {
 	url = _url;
 	if (!_hash.empty()) {
-		url += "#";
+		url += '#';
 		url += _hash;
 	}
 }
@@ -359,10 +359,10 @@ unsigned char *WebPage::LoadUtf8File(LPCWSTR path, bool isHtml, LPCWSTR defEncod
 			CoInitialize(NULL);
 
 			IMultiLanguage *ml = NULL;
-			HRESULT hr = CoCreateInstance(CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage, (LPVOID *)&ml);	
+			HRESULT hr = CoCreateInstance(CLSID_CMultiLanguage, NULL, CLSCTX_INPROC_SERVER, IID_IMultiLanguage, (LPVOID *)&ml);
 
-			MIMECSETINFO charset_src = {0};
-			MIMECSETINFO charset_dst = {0};
+			MIMECSETINFO charset_src = { 0 };
+			MIMECSETINFO charset_dst = { 0 };
 
 			BSTR bstrCharSet = SysAllocString(encoding.c_str());
 			ml->GetCharsetInfo(bstrCharSet, &charset_src);
@@ -376,7 +376,7 @@ unsigned char *WebPage::LoadUtf8File(LPCWSTR path, bool isHtml, LPCWSTR defEncod
 			UINT szDst = (UINT)strlen((LPSTR)ret) * 4;
 			LPSTR dst = new char[szDst];
 
-			if(ml->ConvertString(&dwMode, charset_src.uiInternetEncoding, charset_dst.uiInternetEncoding, (LPBYTE)ret, NULL, (LPBYTE)dst, &szDst) == S_OK) {
+			if (ml->ConvertString(&dwMode, charset_src.uiInternetEncoding, charset_dst.uiInternetEncoding, (LPBYTE)ret, NULL, (LPBYTE)dst, &szDst) == S_OK) {
 				dst[szDst] = 0;
 				delete ret;
 				ret = (unsigned char *)dst;
@@ -448,7 +448,7 @@ void WebFile::OnFinish(DWORD dwError, LPCWSTR errMsg)
 		case WebFile_Waited:
 			_page->OnWaitedFinished(dwError, _file);
 			break;
-		}		
+		}
 	}
 }
 
