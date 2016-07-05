@@ -125,6 +125,7 @@
     <None Include="..\LiteHtml\include\master.css">
       <Filter>LiteHtml</Filter>
     </None>
+    <None Include="LocalDeploy.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="html">

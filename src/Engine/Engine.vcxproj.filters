@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="UI\DeviceContext.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\ListGUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\RegExp.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UserInterface.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Window.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Font.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\GuiModel.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Material.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\WinVar.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Framework\DeclManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\GuiScript.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\SimpleWindow.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Dict.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Lexer.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Lib.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Parser.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\Token.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\TokenParser.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="UI\DeviceContext.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ListGUI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ListGUILocal.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Rectangle.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\RegExp.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserInterface.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserInterfaceLocal.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Window.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Font.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\GuiModel.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Material.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\WinVar.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="Framework\DeclManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\GuiScript.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SimpleWindow.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Dict.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Lexer.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Lib.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Parser.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\Token.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\TokenParser.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="UI">
+      <UniqueIdentifier>{4e795fd1-dd21-4244-95c8-b672adff88d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{df71e9e7-8afc-4961-bfe9-6c5fbbfb6105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{65a072cd-93b9-40f6-95ca-ce092f8ab6fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{d8cea3df-d967-4ad4-8d93-d5d07263a826}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

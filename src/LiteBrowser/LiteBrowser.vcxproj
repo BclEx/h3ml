@@ -60,6 +60,9 @@
     <Manifest>
       <AdditionalManifestFiles>LiteBrowser.exe.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
     </Manifest>
+    <PostBuildEvent>
+      <Command>"$(ProjectDir)LocalDeploy.cmd" "$(SolutionDir)" 32 "$(OutputPath)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -77,6 +80,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>..\..\lib\cairo\32;..\..\lib\freeimage\32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>"$(ProjectDir)LocalDeploy.cmd" "$(SolutionDir)" 32 "$(OutputPath)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\LiteHtml\containers\cairo\cairo_container.h" />
@@ -145,6 +151,7 @@
   <ItemGroup>
     <None Include="..\LiteHtml\include\master.css" />
     <None Include="html\toolbar.html" />
+    <None Include="LocalDeploy.cmd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LiteHtml\LiteHtml.vcxproj">
