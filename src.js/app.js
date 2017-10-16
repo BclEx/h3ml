@@ -2,5 +2,10 @@ import Promise from 'promise-polyfill';
 if (!window.Promise) {
     window.Promise = Promise;
 }
+import Doc from './files/Doc';
 
-//import Global_Inject from './Global/Inject';
+document.global = function () {
+    let doc = new Doc();
+    console.log('doc', doc);
+    doc.render();
+};
